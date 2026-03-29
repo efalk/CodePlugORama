@@ -3,6 +3,14 @@ function setVis(element, vis) {
     element.style.visibility = vis ? 'visible' : 'hidden';
 }
 
+function toggleVis(name) {
+    if (name && (element = document.getElementById(name))) {
+	element.classList.toggle('hidden');
+    } else {
+	console.log('toggleVis("'+name+'"): element not found');
+    }
+}
+
 // specific to Code Plug O'Rama
 
 /** User clicked on bandFilter checkbox */
