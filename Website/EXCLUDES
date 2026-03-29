@@ -1,0 +1,11 @@
+EXCLUDES
+Makefile
+*.md
+*.ezt
+*.swp
+__pycache__
+header.html
+trailer.html
+Test
+Tools
+README.txt

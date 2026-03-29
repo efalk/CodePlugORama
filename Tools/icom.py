@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+# -*- coding: utf8 -*-
+
+import csv
+
+import channel
+
+class Icom(object):
+    @staticmethod
+    def header(csvout: csv.writer, recFilter):
+        """Write out the header line for the CSV file."""
+        csvout.writerow(["CH No","Name","Frequency","Dup","Offset","Tone","Repeater Tone","cToneFreq","DtcsCode","DtcsPolarity","Mode","TStep","Skip"])
+
+    @staticmethod
+    def write(rec: channel.Channel, csvout: csv.writer, count: int, recFilter):
+        """Write out one record. This may throw an exception if any of
+        the ics-217 fields are not valid."""
+        Chan = rec.Chan       # memory #, 0-based
+        Name = rec.Name       # memory label
+        Rxfreq = rec.Rxfreq       # RX freq
+        Mode = rec.Mode
+        Wide = rec.Wide
+        Txfreq = rec.Txfreq       # RX freq
+        Txtone = rec.Txtone
+        Rxtone = rec.Rxtone
+        Comment = rec.Comment
+
+        # Derived values
+        Offset = float(Txfreq) - float(Rxfreq)
+        if Txfreq == Rxfreq: 
+            Duplex = ''
+            OffsetValue = 0
+        elif Offset > 0: 
+            Duplex = 'DUP+'
+            OffsetValue = round(abs(Offset), 1)
+        else: 
+            Duplex = 'DUP-'
+            OffsetValue = round(abs(Offset), 1)
+        
+        # Default values - ignored if not used based on other fields
+        RepeaterTone = '88.5Hz'
+        cToneFreq = '88.5'
+        DtcsCode = '23'
+
+        # Handle tone settings
+        if not Txtone:
+            ToneMode = ''
+            RepeaterTone = '88.5Hz'
+        elif Txtone[0] == 'D':
+            ToneMode = 'DTCS'
+            DtcsCode = Txtone[1:]
+        else:
+            ToneMode = 'Tone'
+            RepeaterTone = f"{Txtone}Hz"
+
+        # Format frequency without rounding, just remove trailing zeros
+        freq = f"{float(Rxfreq):g}"
+
+        # All ACS Frequencies are FM. Note that at least the IC-705 and CS-705 software don't support NFM.
+        RadioMode = Mode
+
+        # Create names matching Icom format - simplified
+        # Extract first part of comment for simple name
+        FirstPart = Comment.split(';')[0].strip() if Comment else ''
+        SimpleName = f"{Name} {FirstPart}" if FirstPart else Name
+
+        # Use sequential channel numbering
+        ChannelNum = count
+
+        # Strip commas from any names to avoid CSV quoting - The ICOM software can't handle it.
+        SimpleName = SimpleName.replace(',', '')
+
+        csvout.writerow([ChannelNum, SimpleName, freq, Duplex, OffsetValue, ToneMode, RepeaterTone, cToneFreq, DtcsCode, 'NN', RadioMode, 5, ''])

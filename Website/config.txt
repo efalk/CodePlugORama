@@ -1,0 +1,8 @@
+# tab-seperated values, keyword followed by options
+# For "source" keyword, the arguments are label and filename.
+# Wildcards are accepted in the filename.
+#
+source	WWARA	WWARA-rptrlist-*.csv
+source	Repeater Roundabout	RepeaterRoundabout.csv
+source	GMRS	gmrs.csv
+source	MURS	murs.csv
