@@ -82,7 +82,7 @@ def main():
     recFilter = {}
     try:
         (optlist, args) = getopt.getopt(sys.argv[1:], 'hb:m:s:B:R:lv',
-            ['help', 'Chirp', 'RtSys', 'Icom', 'sparse', 'skip'])
+            ['help', 'Chirp', 'RtSys', 'Icom', 'IC-92', 'sparse', 'skip'])
         for flag, value in optlist:
             if flag in ('-h', '--help'):
                 print(usage)
@@ -114,6 +114,9 @@ def main():
                 writer = RtSys
             elif flag == '--Icom':
                 writer = Icom
+            elif flag == '--IC-92':
+                from rt_ic92 import RtSysIc92
+                writer = RtSysIc92
     except getopt.GetoptError as e:
         print(e, file=sys.stderr)
         print(usage, file=sys.stderr)
