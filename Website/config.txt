@@ -3,6 +3,7 @@
 # Wildcards are accepted in the filename.
 #
 source	WWARA	WWARA-rptrlist-*.csv
+source	New england Repeaters	NERepeaters_3-26.csv
 source	Repeater Roundabout	RepeaterRoundabout.csv
 source	GMRS	gmrs.csv
 source	MURS	murs.csv
