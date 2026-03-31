@@ -11,6 +11,27 @@ function toggleVis(name) {
     }
 }
 
+/**
+ * Set this popover so when it appears, it appears next to this anchor.
+ * The anchor can be anything, but typically it's the button that
+ * triggered the popover.
+ */
+function setupPopover(anchor, popover) {
+    if (typeof anchor == 'string') anchor = document.getElementById(anchor);
+    if (typeof popover == 'string') popover = document.getElementById(popover);
+
+    popover.addEventListener('beforetoggle', (e) => {
+        if (e.newState === "open") {
+	    const rect = anchor.getBoundingClientRect();
+	    const gap = 10; // Space between button and popover
+	    popover.style.position = "absolute";
+	    popover.style.left = `${rect.right + gap + window.scrollX}px`;
+	    popover.style.top = `${rect.top - gap + window.scrollY}px`;
+        }
+    });
+}
+
+
 // specific to Code Plug O'Rama
 
 /** User clicked on bandFilter checkbox */
@@ -68,7 +89,7 @@ function setupDnD() {
     dropArea.addEventListener('drop', handleFiles);
 
     // Handle clicks; launch the file chooser
-    console.log("Registering event listener")
+    //console.log("Registering event listener")
     dropArea.addEventListener('click', (e) => {
 	//console.log("droparea event: " + e + ", type=" + e.type + ", which=" + e.which + ", detail=" + e.detail);
 	e.stopPropagation();

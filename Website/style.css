@@ -46,6 +46,12 @@ header {
 
 .tab {margin-right:5em;}
 
+[popover] {
+  margin: 0;
+  inset: unset;
+  position: absolute;
+}
+
 /* Main body styles */
 
 .page-content {
@@ -100,7 +106,6 @@ ul a:hover{text-decoration:underline;}
 }
 
 .popupBox {
-  cursor: pointer;
   width: 300px;
   font-weight: normal;
   background-color: white;
@@ -109,16 +114,23 @@ ul a:hover{text-decoration:underline;}
   border-style: solid;
   border-radius: 6px;
   box-shadow: 8px 8px 12px 2px #aaa;
-  padding: 8px;
-  position: absolute;
-  z-index: 1;
-  top: -5ex;
-  left: 8em;
-  margin-left: -80px;
 }
 
-.hidden {
-  display: none;
+.circleBtn {
+  width: 2ex;
+  height: 2ex;
+  border-radius: 50%;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: white;
+  color: blue;
+  border: thin solid blue;
+  cursor: pointer;
+  padding: 0; /* Remove default button padding */
+  padding-top: 2px;
 }
 
 .qmark {
@@ -135,6 +147,10 @@ ul a:hover{text-decoration:underline;}
   background: white;
   border: thin solid blue;
   position: relative;
+}
+
+.hidden {
+  display: none;
 }
 
 .drop-area {

@@ -65,9 +65,10 @@ customize the output.
 </p>
 <p><label for="start">Start: </label><input type=text value="1" size=5 id="start" name="start"></p>
 
-<label for="longNames">Long names: </label><input type=checkbox id="longNames" names: <input type=checkbox name="longNames">
-<span class=qmark onclick="toggleVis('nameHelp')">?
-<span id=nameHelp class="popupBox hidden">
+<p><label for="longNames">Long names: </label>
+<input type=checkbox id="longNames">
+<button id="nameQ" popovertarget="nameHelp" type="button" class="circleBtn">?</button></p>
+<div id=nameHelp popover class="popupBox">
 <p>By default, the name field in the output
 is the same as the name field in the input, which is usually short enough to
 fit the display of most radios.</p>
@@ -75,11 +76,12 @@ fit the display of most radios.</p>
 information to the name where appropriate. Typically this means adding the
 station call sign if not already part of the name. For e.g. ICS 217 forms,
 the channel number is added if not already present.</p>
-</span></span>
-<br><br>
+</div>
 
-<label for="sparse">Sparse: </label><input type=checkbox id="sparse" name="sparse">
-<span class=qmark onclick="toggleVis('scaleHelp')">?<span id="scaleHelp" class="popupBox hidden">
+<p><label for="sparse">Sparse: </label><input type=checkbox id="sparse" name="sparse">
+<button id="sparseQ" popovertarget="sparseHelp" type="button" class="circleBtn">?</button></p>
+
+<div id="sparseHelp" popover class="popupBox">
 <p>By default, output records are written and numbered in the order
 they're read from the input. The record numbers start at the Start
 value given above and are strictly incrementing, ignoring the record
@@ -107,10 +109,15 @@ and if there are gaps in the input, there will be gaps in the output.</p>
 <p>If the input file does not have channel numbers, this option has no effect.</p>
 <p>For more details, see
 <a href="help.html#sparse" target="CodePlugHelp">help file</a></p>
-</span></span><br>
+</div>
+
 </p>
 <p><label for="skip">Skip: </label><input type=checkbox id="skip" name="skip">
-<label for="skip"><i>(Mark all channels to be skipped on scan)</i> </p>
+<button id="skipQ" popovertarget="skipHelp" type="button" class="circleBtn">?</button></p>
+<div id="skipHelp" popover class="popupBox">
+<p>Sets the "skip this channel while scanning" flag for all channels. If the
+input CSV file had a "skip" column, it is overridden.</p></div>
+
 <p><input type=submit name="submit"></p>
 </form>
 <div id="debug"></div>
@@ -120,5 +127,8 @@ and if there are gaps in the input, there will be gaps in the output.</p>
 <script language="JavaScript">
 <!--
 setupDnD();
+setupPopover("nameQ","nameHelp");
+setupPopover("sparseQ","sparseHelp");
+setupPopover("skipQ","skipHelp");
 -->
 </script>
