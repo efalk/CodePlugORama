@@ -11,6 +11,7 @@ import sys
 sys.path.append('../Tools')
 
 import common
+from fieldstorage import FieldStorage
 from chirp import Chirp
 from rtsys import RtSys
 from icom import Icom
@@ -37,7 +38,7 @@ _writers = { "Chirp":Chirp, "RT Systems":RtSys, "Icom":Icom}
 _names = { "Chirp":'Chirp', "RT Systems":'RtSys', "Icom":'Icom'}
 
 def main():
-    form = cgi.FieldStorage()
+    form = FieldStorage()
 
     # Debug only
     #print('Content-Type: text/plain; charset=utf-8')
@@ -47,6 +48,8 @@ def main():
     #print(f"cwd = {os.getcwd()}")
     #print(f"topdir = {_topdir}")
     #print(f"sourcedir = {_sourcedir}")
+    #print()
+    #print(form)
     #print()
 
     # Select the source
@@ -140,7 +143,7 @@ def main():
         return 3
     return 0
 
-def getInputFile(source: str, form: cgi.FieldStorage):
+def getInputFile(source: str, form: FieldStorage):
     if source.startswith('Upload'):
         fileInput = form['fileInput']
         return io.TextIOWrapper(fileInput.file, encoding='utf-8', errors='ignore')
