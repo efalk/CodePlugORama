@@ -1,3 +1,5 @@
+
+# Customize these for your server
 DESTHOST=yourname@example.com
 DESTTOP=yourname/public
 DESTDIR=CodePlugORama
@@ -35,4 +37,5 @@ clobber:
 	rm ${GENERATED_HTML}
 
 server:
-	python3 -m http.server --cgi
+	~/Python/simple_server_cgi.py
+	#python3 -m http.server --cgi
