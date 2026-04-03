@@ -102,6 +102,10 @@ class Anytone(Channel):
 
     # OUTPUT SECTION
 
+    @classmethod
+    def getWriter(cls, ifile):
+        return csv.writer(ifile, quoting=csv.QUOTE_ALL)
+
     @staticmethod
     def header(csvout: csv.writer, recFilter):
         """Write out the header line for the CSV file."""

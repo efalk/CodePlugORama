@@ -77,7 +77,6 @@ def main():
     global verbose
     ifile = sys.stdin
 
-    csvout = csv.writer(sys.stdout)
     writer = Chirp
 
     start = 1
@@ -129,6 +128,8 @@ def main():
     if args:
         ifile = open(args[0],'r')
     csvin = csv.reader(ifile)
+
+    csvout = writer.getWriter(sys.stdout)
 
     return common.process(csvin, None, csvout, writer, start, recFilter)
 

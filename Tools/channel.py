@@ -54,9 +54,10 @@
 #  Skip:
 #    This channel should not be included in scans
 
+import csv
+import decimal
 import re
 import sys
-import decimal
 
 # Schema:
 #   0 group, usually blank
@@ -87,7 +88,7 @@ def csvget(value):
 class Channel(object):
     """Channel data base class. Can parse a generic format."""
 
-    # INPUT SECTION (there is no output section)
+    # INPUT SECTION
 
     @staticmethod
     def probe(line: list):
@@ -259,6 +260,14 @@ class Channel(object):
             elif c == 'd' and mode not in Channel.modeList.values():
                 return True
         return False
+
+    # OUTPUT UTILITIES
+
+    @classmethod
+    def getWriter(cls, ifile):
+        """Return an output file writer suitable for this format.
+        In most cases, it's a csv writer."""
+        return csv.writer(ifile)
 
 # ---- program
 
