@@ -334,13 +334,13 @@ This tool swaps them back before writing the output.
 The format accepted by this tool is:
 
 |Field name|Explanation|
-|FREQ|29.6800, repeater output, i.e. downlink, i.e. radio input|
+|FREQ|146.415; repeater output, i.e. downlink, i.e. radio input|
 |OFFSET|+/-/*/S, See below for standard values|
 |ST|MA|
 |CITY|Vernon|
 |MODES|FM, NFM, DMR, D-STAR, NXDN, P25, YSF (Yaesu Fusion).|
-|CALL|W7RNB; includes url to sponsor if available|
-|CODE IN|107.2, CC4, NAC 293, etc. Blank for CSQ|
+|CALL|KB1MMR; includes url to sponsor if available|
+|CODE IN|141.3, CC4, NAC293, etc. Blank for CSQ|
 |CODE OUT|ditto|
 |STATUS|usually blank; may be Local, OFF, etc.|
 |COUNTY|Middlesex|
@@ -350,6 +350,12 @@ The format accepted by this tool is:
 |Last Update|yyyy/mm/dd or blank|
 
 The columns must be in this exact order.
+
+This format does not (normally) specify the repeater offset; it
+assumes that you already know what the standard values are. So the
+**Offset** column merely gives '+', '-', 'S' (for simplex), or '\*'.
+If '\*' is specified, the offset will be given in the comments after
+"\*Input:", e.g. "\*Input: 147.415".
 
 Some repeaters are capable of more than one operating mode. For
 example, AC1M in Massachusets handles FM, P25, Yaesu Fusion, D-STAR,
