@@ -85,7 +85,7 @@ customize the output.</p>
 <p><label for="start">Start: </label><input type=text value="1" size=5 id="start" name="start"></p>
 
 <p><label for="longNames">Long names: </label>
-<input type=checkbox id="longNames">
+<input type=checkbox id="longNames" name="longNames">
 <button id="nameQ" popovertarget="nameHelp" type="button" class="circleBtn">?</button></p>
 <div id=nameHelp popover class="popupBox">
 <p>By default, the name field in the output
