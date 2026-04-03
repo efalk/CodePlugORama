@@ -27,7 +27,8 @@ def findReader(csvin) -> Channel:
     from wwara import WWARA
     from nerd import NERD
     from rtsys import RtSys
-    readers = [Chirp, RtSys, ics217, rr, Channel, WWARA, NERD]
+    from anytone import Anytone
+    readers = [Chirp, RtSys, ics217, rr, Channel, WWARA, NERD, Anytone]
     for line in csvin:
         if verbose >= 2:
             print(line, file=sys.stderr)
@@ -35,6 +36,23 @@ def findReader(csvin) -> Channel:
             if r.probe(line):
                 return r
     return None
+
+callsign_re = re.compile(r'''[A-Z]+\d[A-Z]+(-\d+)?''')  # callsign with optional -nn
+callsign_l_re = re.compile(r'''[A-Z]+\d[A-Z]+-\d+''')   # callsign with non-optional -nn
+
+def findCallsign(*args):
+    """Given a number of strings, return a call sign if one can be found."""
+    rval = None
+    for value in args:
+        mo = callsign_l_re.search(value)
+        if mo:
+            # As good as it gets
+            return mo.group()
+        if not rval:
+            mo = callsign_re.search(value)
+            if mo:
+                rval = mo.group()
+    return rval
 
 def round_down(n,r): return n-n%r
 def round_up(n,r):   return round_down(n+r-1,r)

@@ -18,6 +18,7 @@ import common
 from chirp import Chirp
 from rtsys import RtSys
 from icom import Icom
+from anytone import Anytone
 
 # TODO: add filtering for Yaesu Fusion, NXDN, etc.
 
@@ -52,6 +53,7 @@ usage = f"""Convert CSV file from ACS 217 spreadsheet to formats radios use
         --Chirp         Output for Chirp (default)
         --RtSys         Output for RT Systems
         --Icom          Output for Icom
+        --Anytone       Output for Icom (experimental)
         --IC-92         Output for Icom-92, RT Systems
         -l              Long names, for radios that can take them
         -s <n>          Start numbering at <n>; default is 1
@@ -82,7 +84,7 @@ def main():
     recFilter = {}
     try:
         (optlist, args) = getopt.getopt(sys.argv[1:], 'hb:m:s:B:R:lv',
-            ['help', 'Chirp', 'RtSys', 'Icom', 'IC-92', 'sparse', 'skip'])
+            ['help', 'Chirp', 'RtSys', 'Icom', 'Anytone', 'IC-92', 'sparse', 'skip'])
         for flag, value in optlist:
             if flag in ('-h', '--help'):
                 print(usage)
@@ -114,6 +116,8 @@ def main():
                 writer = RtSys
             elif flag == '--Icom':
                 writer = Icom
+            elif flag == '--Anytone':
+                writer = Anytone
             elif flag == '--IC-92':
                 from rt_ic92 import RtSysIc92
                 writer = RtSysIc92

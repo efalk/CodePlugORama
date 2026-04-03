@@ -15,6 +15,7 @@ from fieldstorage import FieldStorage
 from chirp import Chirp
 from rtsys import RtSys
 from icom import Icom
+from anytone import Anytone
 
 # Explanation: running a test server on my system, the CWD as seen
 # by this script is "CodePlugORama". When run under production,
@@ -33,9 +34,11 @@ _bands = {'hf':'L', 'vhf':'V', 'vhf2':'T', 'uhf':'U', 'gmrs':'G', 'digital':'D'}
 _modes = {'FM':'F', 'AM':'A', 'LSB':'L', 'USB':'U', 'CW':'C', 'DMR':'D', 'DSTAR':'S',
     'PKT':'d', 'P25':'d', 'NXDN':'d', 'ATV':'d', 'DATV':'d', 'DIG':'d', }   # TODO: these modes
 
-_writers = { "Chirp":Chirp, "RT Systems":RtSys, "Icom":Icom}
+# Classes to write various formats
+_writers = { "Chirp":Chirp, "RT Systems":RtSys, "Icom":Icom, "Anytone":Anytone}
 
-_names = { "Chirp":'Chirp', "RT Systems":'RtSys', "Icom":'Icom'}
+# Name suffixes for output file
+_names = { "Chirp":'Chirp', "RT Systems":'RtSys', "Icom":'Icom', "Anytone":'Anytone'}
 
 def main():
     form = FieldStorage()

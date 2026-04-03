@@ -7,7 +7,7 @@
 
 This web page converts CSV files in one of several different formats into a format that
 your radio can understand. More specifically, into files that CHIRP,
-RT Systems, or Icom can understand.
+RT Systems, Icom, or Anytone can understand.
 
 There are several built-in databases you can use, or you can upload
 your own in one of several [accepted formats](#accepted-formats).
@@ -78,6 +78,7 @@ One of:
 Yaesu FT-60 and several other radios, but not guaranteed to work
 for all radios.
 * Icom — Format accepted by Icom radio programming software.
+* Anytone — Format accepted by Anytone radio programming software.
 
 ### Start
 

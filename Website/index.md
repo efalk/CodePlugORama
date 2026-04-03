@@ -3,7 +3,7 @@
 
 This page allows you to select from one of several sources or to
 upload your own. It can generate CSV files for Chirp, RT Systems
-(tested with Yaesu FT-60 and several other radios), or Icom.
+(tested with Yaesu FT-60 and several other radios), Icom, or Anytone.
 
 You can filter the input based on various criteria and slightly
 customize the output.
@@ -61,6 +61,7 @@ customize the output.
 <option>Chirp</option>
 <option>RT Systems</option>
 <option>Icom</option>
+<option>Anytone</option>
 </select>
 </p>
 <p><label for="start">Start: </label><input type=text value="1" size=5 id="start" name="start"></p>
