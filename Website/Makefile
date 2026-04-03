@@ -29,9 +29,9 @@ index.html: index.ezt
 	markdown.py -i $< -o $@ -T "Code Plug O'Rama" -H header.html -t trailer.html
 
 upload:	all *.css *.js
-	rsync -avzL --exclude-from=EXCLUDES ./ ${DESTHOST}:${DESTTOP}/${DESTDIR}
-	cd ../Tools; rsync -avzL --exclude-from=EXCLUDES --delete-excluded ./ ${DESTHOST}:${DESTTOP}/${DESTDIR}/Tools
-	cd ../Sources; rsync -avzL ./ ${DESTHOST}:${DESTTOP}/${DESTDIR}/Sources
+	rsync -avzuL --exclude-from=EXCLUDES ./ ${DESTHOST}:${DESTTOP}/${DESTDIR}
+	cd ../Tools; rsync -avzuL --exclude-from=EXCLUDES --delete-excluded ./ ${DESTHOST}:${DESTTOP}/${DESTDIR}/Tools
+	cd ../Sources; rsync -avzuL ./ ${DESTHOST}:${DESTTOP}/${DESTDIR}/Sources
 
 clobber:
 	rm ${GENERATED_HTML}
