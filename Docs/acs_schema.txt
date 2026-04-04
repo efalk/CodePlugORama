@@ -1,0 +1,24 @@
+
+The CSV file is a bit messy since many lines are full-line comments.
+
+Parsed by ics217.py
+
+   0 Ch #	 		e.g. "V01"
+   1 "Channel Configuration"	"Repeater" | "Simplex"
+   2 Display Name		displayed by radio, e.g. "V01PSR"
+   3 Channel/Repeater Name	e.g. "PSRG" or "KC ARES Tiger"
+   4 RX Freq
+   5 N/W			narrow/wide: W, N
+   6 "Rx Tone, CC/TS/TG"	"CSQ", "CSQ†", "TSQ', a frequency, or 'D'+ctcss code
+   7 TX Freq			typically for repeater uplink
+   8 N/W			Tx narrow/wide: W, N
+   9 "Tx Tone, CC/TS/TG"	TX tone: "CSQ", a Frequency, 'D'+dcs;  e.g. 103.5
+  10 Mode			A, F, MF, MP, D; almost always "A"
+  11 Remarks
+
+CSQ is carrier squelch.
+CSQ† is carrier squelch, but the repeater *is* providing tone if you want it
+TSQ indicates that tone squelch is encouraged; used with portable repeaters
+
+
+Ch #,"Channel Configuration",Display Name,Channel/Repeater Name,RX Freq,N/W,"Rx Tone, CC/TS/TG",TX Freq,N/W,"Tx Tone, CC/TS/TG",Mode,Remarks,

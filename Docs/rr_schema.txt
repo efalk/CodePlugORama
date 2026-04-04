@@ -1,0 +1,17 @@
+
+Repeater Roundabout csv file:
+
+  RR#				count, starts with 1
+  Callsign			e.g. WW7PSR
+  Output (MHz)			e.g. 146.960
+  Offset (MHz)			e.g.  -0.6, +5.0
+  Tone (Hz)			e.g. 103.5
+  RepeaterBook ID		e.g. 206 or blank
+  Location			e.g. "Capitol Hill, Seattle, WA"
+  Mode				e.g. FM
+  Group				e.g. Puget Sound Repeater Group
+  Website			e.g.  http://www.psrg.org
+  RepeaterBook State ID		e.g. 53
+  Latitude			e.g. 47.6395
+  Longitude			e.g. -122.3693
+

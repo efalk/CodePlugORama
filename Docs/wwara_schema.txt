@@ -1,0 +1,45 @@
+Download from https://www.wwara.org/coordinations/coordination-data-files/
+  https://www.wwara.org/DataBaseExtract.zip
+
+   FC_RECORD_ID		1005
+   SOURCE		WWARA
+   OUTPUT_FREQ		29.6800
+   INPUT_FREQ		29.5800
+   STATE		WA
+   CITY			Lookout Mtn
+   LOCALE		WASHINGTON- NORTHWEST
+   CALL			W7RNB
+   SPONSOR		5CountyEmCommGrp
+   CTCSS_IN		110.9 (or blank)
+   CTCSS_OUT		110.9 (or blank)
+   DCS_CDCSS		023 (or blank)
+   DTMF
+   LINK			link access, e.g. E+echolink#
+   FM_WIDE	    Y	repeater can handle wide
+   FM_NARROW	    N	repeater can handle narrow; (some repeaters can do both)
+   DSTAR_DV	    N	dstar capable
+   DSTAR_DD	    N	dstar capable
+   DMR		    N	dmr capable
+   DMR_COLOR_CODE
+   FUSION	    N
+   FUSION_DSQ
+   P25_PHASE_1	    N
+   P25_PHASE_2	    N
+   P25_NAC
+   NXDN_DIGITAL	    N	digital only
+   NXDN_MIXED	    N	mixed mode
+   NXDN_RAN		radio access number
+   ATV		    N	amateur television (analog)
+   DATV		    N	amateur television (digital)
+   RACES	    N
+   ARES		    N
+   WX		    N
+   URL
+   LATITUDE	    48.6875
+   LONGITUDE	    -122.3625
+   EXPIRATION_DATE  2026-02-28
+   COMMENT
+
+All fields in "quotes" for CSV. Not requied for TSV.
+
+Field names must be exact. Order is optional.
