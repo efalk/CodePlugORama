@@ -2,68 +2,66 @@ Anytone 878 schema
 
 May work with other Anytone radios
 
-In the sample files I found, every single field was quoted. I don't
-know if this is required.
+In the sample files I found, every single field was quoted. This doesn't
+seem to be a requirement.
 
-  Header			example
+Latest known schema:
+Note: the software that uses this pops up a warning about how this format is
+subject to change. I've already had to change the format
+once. This is likely not worth pursuing any more.
 
-  No.				1
-  Channel Name			Local 1 SCE
-  Receive Frequency		440.77500
-  Transmit Frequency		445.77500
-  Channel Type			D-Digital
-  Transmit Power		High
-  Band Width			12.5K
-  CTCSS/DCS Decode		Off
-  CTCSS/DCS Encode		Off
-  Contact			Local 1
-  Contact Call Type		Group Call
-  Contact TG/DMR ID		3181
-  Radio ID			KD7DGF
-  Busy Lock/TX Permit		Same Color Code
-  Squelch Mode			Carrier
-  Optional Signal		Off
-  DTMF ID			1
-  2Tone ID			1
-  5Tone ID			1
-  PTT ID			Off
-  RX Color Code			1
-  Slot				1
-  Scan List			Seattle/Central
-  Receive Group List		None
-  PTT Prohibit			Off
-  Reverse			Off
-  Simplex TDMA			Off
-  Slot Suit			Off
-  AES Digital Encryption	Normal Encryption
-  Digital Encryption		Off
-  Call Confirmation		Off
-  Talk Around(Simplex)		Off
-  Work Alone			Off
-  Custom CTCSS			251.1
-  2TONE Decode			1
-  Ranging			Off
-  Through Mode			Off
-  APRS RX			Off
-  Analog APRS PTT Mode		Off
-  Digital APRS PTT Mode		Off
-  APRS Report Type		Off
-  Digital APRS Report Channel	1
-  Correct Frequency[Hz]		0
-  SMS Confirmation		Off
-  Exclude channel from roaming	0
-  DMR MODE			1
-  DataACK Disable		0
-  R5toneBot			0
-  R5ToneEot			0
-  Auto Scan			0
-  Ana Aprs Mute			0
-  Send Talker Alias		0
-  AnaAprsTxPath			0
-  ARC4				0
-  ex_emg_kind			0
-  TxCC				1
+Tested on Anytone 878 software.
 
-441.850 + 103.5
-145.750 103.5
-145.590 simplex
+  0  No.                               1
+  1  Channel Name                      V01PSR
+  2  Receive Frequency                 146.96000
+  3  Transmit Frequency                146.36000
+  4  Channel Type                      A-Analog
+  5  Transmit Power                    High
+  6  Band Width                        25K
+  7  CTCSS/DCS Decode                  Off
+  8  CTCSS/DCS Encode                  103.5
+  9  Contact                           Contact 1
+ 10  Contact Call Type                 Group Call
+ 11  Contact TG/DMR ID                 1
+ 12  Radio ID                          WW7PSR
+ 13  Busy Lock/TX Permit               Off
+ 14  Squelch Mode                      Carrier
+ 15  Optional Signal                   Off
+ 16  DTMF ID                           1
+ 17  2Tone ID                          1
+ 18  5Tone ID                          1
+ 19  PTT ID                            Off
+ 20  Color Code                        1
+ 21  Slot                              1
+ 22  Scan List                         None
+ 23  Receive Group List                None
+ 24  PTT Prohibit                      Off
+ 25  Reverse                           Off
+ 26  Simplex TDMA                      Off
+ 27  Slot Suit                         Off
+ 28  AES Digital Encryption            Normal Encryption
+ 29  Digital Encryption                Off
+ 30  Call Confirmation                 Off
+ 31  Talk Around(Simplex)              Off
+ 32  Work Alone                        Off
+ 33  Custom CTCSS                      1.0
+ 34  2TONE Decode                      0
+ 35  Ranging                           Off
+ 36  Through Mode                      Off
+ 37  APRS RX                           Off
+ 38  Analog APRS PTT Mode              Off
+ 39  Digital APRS PTT Mode             Off
+ 40  APRS Report Type                  Off
+ 41  Digital APRS Report Channel       1
+ 42  Correct Frequency[Hz]             0
+ 43  SMS Confirmation                  Off
+ 44  Exclude channel from roaming      0
+ 45  DMR MODE                          0
+ 46  DataACK Disable                   0
+ 47  R5toneBot                         0
+ 48  R5ToneEot                         0
+ 49  Auto Scan                         0
+ 50  Ana Aprs Mute                     0
+ 51  Send Talker Alias                 0
+
