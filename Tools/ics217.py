@@ -49,16 +49,17 @@ class ics217(channel.Channel):
 
     # INPUT SECTION
 
-    @staticmethod
-    def probe(line: list):
+    @classmethod
+    def probe(cls, line: list):
         """Examine line to see if the input is in ACS format. Return
-        None if not. Anything else is true."""
-        return len(line) >= 11 and \
+        cls if so, else None."""
+        match = len(line) >= 11 and \
             line[2] == "Display Name" and \
             line[3] == "Channel/Repeater Name" and \
             line[4] == "RX Freq" and \
             line[5] == "N/W" and \
             line[7] == "TX Freq"
+        return cls if match else None
 
     def __init__(this, recFilter: dict, line):
         """Create an ics217 object from a list of csv values. Caller

@@ -63,8 +63,8 @@ class NERD(channel.Channel):
 
     cache = []        # Optional cached first record
 
-    @staticmethod
-    def probe(line: list):
+    @classmethod
+    def probe(cls, line: list):
         """Examine line to see if the input is in Chirp format. Return
         None if not. Anything else is true."""
         # OK, this is kind of ugly. As downloaded from NERD, the
@@ -92,7 +92,7 @@ class NERD(channel.Channel):
             return None
 
         NERD.cache = NERD.parse(line, {})
-        return not not NERD.cache
+        return cls if NERD.cache else None
 
     def __init__(this, recFilter: dict, line: list, mode: str = None):
         """Create a NERD object from a list of csv values. Caller

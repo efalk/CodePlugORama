@@ -69,15 +69,16 @@ class WWARA(channel.Channel):
 
     # INPUT SECTION (there is no output section)
 
-    @staticmethod
-    def probe(line: list):
+    @classmethod
+    def probe(cls, line: list):
         """Examine line to see if the input is in Chirp format. Return
-        None if not. Anything else is true."""
-        return len(line) >= 38 and \
+        cls if so, else None."""
+        match = len(line) >= 38 and \
             line[0] == "FC_RECORD_ID" and \
             line[1] == "SOURCE" and \
             line[2] == "OUTPUT_FREQ" and \
             line[3] == "INPUT_FREQ"
+        return cls if match else None
 
     def __init__(this, recFilter: dict, line):
         """Create a WWARA object from a list of csv values. Caller

@@ -16,11 +16,11 @@ class Chirp(Channel):
 
     # INPUT SECTION
 
-    @staticmethod
-    def probe(line: list):
+    @classmethod
+    def probe(cls, line: list):
         """Examine line to see if the input is in Chirp format. Return
-        None if not. Anything else is true."""
-        return len(line) >= 17 and \
+        this class if so, else None."""
+        match = len(line) >= 17 and \
             line[1] == "Name" and \
             line[2] == "Frequency" and \
             line[3] == "Duplex" and \
@@ -30,6 +30,7 @@ class Chirp(Channel):
             line[7] == "cToneFreq" and \
             line[8] == "DtcsCode" and \
             line[9] == "DtcsPolarity"
+        return cls if match else None
 
     def __init__(this, recFilter: dict, line):
         """Create a Chirp object from a list of csv values. Caller

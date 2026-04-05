@@ -90,11 +90,12 @@ class Channel(object):
 
     # INPUT SECTION
 
-    @staticmethod
-    def probe(line: list):
-        """Examine line to see if the input is in Chirp format. Return
-        None if not. Anything else is true."""
-        return len(line) >= 12 and \
+    @classmethod
+    def probe(cls, line: list):
+        """Examine line to see if the input is in Chirp format.
+        If so, return a class that can read it. Usually this
+        class."""
+        match = len(line) >= 12 and \
             line[0] == "group" and \
             line[1] == "chan" and \
             line[2] == "txfreq" and \
@@ -107,6 +108,7 @@ class Channel(object):
             line[9] == "mode" and \
             line[10] == "wide" and \
             line[11] == "power"
+        return cls if match else None
 
 
     def __init__(self, recFilter: dict, *args):

@@ -33,8 +33,9 @@ def findReader(csvin) -> Channel:
         if verbose >= 2:
             print(line, file=sys.stderr)
         for r in readers:
-            if r.probe(line):
-                return r
+            cls = r.probe(line)
+            if cls:
+                return cls
     return None
 
 callsign_re = re.compile(r'''[A-Z]+\d[A-Z]+(-\d+)?''')  # callsign with optional -nn

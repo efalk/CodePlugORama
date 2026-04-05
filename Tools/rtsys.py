@@ -20,10 +20,10 @@ class RtSys(channel.Channel):
 
     hasBanks = False
 
-    @staticmethod
-    def probe(line: list):
+    @classmethod
+    def probe(cls, line: list):
         """Examine line to see if the input is in RT Systems format. Return
-        None if not. Anything else is true."""
+        cls if so. Else None."""
         isRt = len(line) >= 8 and \
             line[1] == "Receive Frequency" and \
             line[2] == "Transmit Frequency" and \
@@ -34,7 +34,7 @@ class RtSys(channel.Channel):
             line[7] == "Show Name"
         if isRt and len(line) >= 18 and line[17] == "Bank 1":
             RtSys.hasBanks = True
-        return isRt
+        return cls if isRt else None
 
     def __init__(this, recFilter: dict, line):
         """Create an RtSys object from a list of csv values. Caller

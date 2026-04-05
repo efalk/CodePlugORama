@@ -97,11 +97,11 @@ class Anytone(Channel):
 
     # INPUT SECTION
 
-    @staticmethod
-    def probe(line: list):
+    @classmethod
+    def probe(cls, line: list):
         """Examine line to see if the input is in Anytone format. Return
-        None if not. Anything else is true."""
-        return len(line) >= 17 and \
+        this class if so, else None."""
+        match = len(line) >= 17 and \
             line[0] == "No." and \
             line[1] == "Channel Name" and \
             line[2] == "Receive Frequency" and \
@@ -112,6 +112,7 @@ class Anytone(Channel):
             line[7] == "CTCSS/DCS Decode" and \
             line[8] == "CTCSS/DCS Encode" and \
             line[12] == "Radio ID"
+        return cls if match else None
 
 
     def __init__(this, recFilter: dict, line):
