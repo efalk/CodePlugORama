@@ -103,8 +103,10 @@ class Chirp(Channel):
             wide = 'N'
             Mode = Mode[1:]
 
+        Skip = 'Y' if Skip else ''
+
         super().__init__(recFilter, None, Chan, None, Freq, Offset,
-            Name, Comment, txtone, rxtone, Mode, wide, Power)
+            Name, Comment, txtone, rxtone, Mode, wide, Power, Skip)
 
 
     @staticmethod
@@ -152,7 +154,7 @@ class Chirp(Channel):
         Txfreq = rec.Txfreq       # RX freq
         Txtone = rec.Txtone
         Rxtone = rec.Rxtone
-        Skip = 'S' if rec.Skip else ''
+        Skip = 'S' if rec.Skip == 'Y' else ''
 
         # Derived values
         if recFilter.get('longName'): Name = rec.getLongName()

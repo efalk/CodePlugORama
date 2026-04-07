@@ -108,7 +108,7 @@ def main():
         #print("sparse")
 
     if form.getvalue('skip'):
-        recFilter['skip'] = True
+        recFilter['skip'] = 'Y'
         #print("sparse")
 
     #print()

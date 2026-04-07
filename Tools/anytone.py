@@ -204,7 +204,7 @@ class Anytone(Channel):
         Txtone = rec.Txtone
         Rxtone = rec.Rxtone
         Power = rec.Power
-        Skip = 'S' if rec.Skip else ''
+        Skip = 'S' if rec.Skip == 'Y' else ''
 
         # Derived values
         if recFilter.get('longName'): Name = rec.getLongName()

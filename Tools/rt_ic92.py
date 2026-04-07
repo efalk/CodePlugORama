@@ -52,29 +52,29 @@ class RtSysIc92(channel.Channel):
         if CTCSS: CTCSS += " Hz"
         DCS = derived.DCS
 
-        # Ch #          channel, e.g. "V01" or "0"
-        # ''            slot # in radio, e.g. 0
-        # RX Freq       Downlink freq, e.g. 146.520 or 145.130
-        # TX Freq       Uplink freq, e.g. 146.520 or 144.530
-        # offset freq   downlink - uplink, e.g. "000 kHz" or "600 kHz"
-        # offset dir    sign of offset, e.g. "Simplex", "Plus", "Minus"
-        # Mode          e.g. "FM"
-        # Name          e.g. "[ ]" or "V01 PSR"
-        # tone?         "None", "Tone", etc.
-        # tone CTCSS    e.g. "141.3 Hz"
-        # rxctss        e.g. "88.5"
-        # dcs           e.g. "23"
-        # dcs polar     e.g. "Both N"
-        # skip          e.g. "Off"
-        # step          e.g. "5 kHz"
-        # bank                                  
-        # bankch                                        
-        # Comment
-        # Digital Squelch                                       
-        # Digital Code                                  
-        # Your Callsign                                 
-        # Rpt-1 CallSign                                        
-        # Rpt-2 CallSign                                        
+        #  0 Ch #          channel, e.g. "V01" or "0"
+        #  1 ''            slot # in radio, e.g. 0
+        #  2 RX Freq       Downlink freq, e.g. 146.520 or 145.130
+        #  3 TX Freq       Uplink freq, e.g. 146.520 or 144.530
+        #  4 offset freq   downlink - uplink, e.g. "000 kHz" or "600 kHz"
+        #  5 offset dir    sign of offset, e.g. "Simplex", "Plus", "Minus"
+        #  6 Mode          e.g. "FM"
+        #  7 Name          e.g. "[ ]" or "V01 PSR"
+        #  8 tone?         "None", "Tone", etc.
+        #  9 tone CTCSS    e.g. "141.3 Hz"
+        # 10 rxctss        e.g. "88.5"
+        # 11 dcs           e.g. "23"
+        # 12 dcs polar     e.g. "Both N"
+        # 13 skip          e.g. "Off"       TODO: what string means skip?
+        # 14 step          e.g. "5 kHz"
+        # 15 bank
+        # 16 bankch
+        # 17 Comment
+        # 18 Digital Squelch
+        # 19 Digital Code
+        # 20 Your Callsign
+        # 21 Rpt-1 CallSign
+        # 22 Rpt-2 CallSign
 
         csvout.writerow([Chan, count, Rxfreq, Txfreq, Offset_s, OpMode, rec.Mode, Name, ToneMode,
             CTCSS, CTCSS, DCS, "Both N", "Off", "5 kHz", "","", Comment, "","","","",""])

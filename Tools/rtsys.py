@@ -127,7 +127,7 @@ class RtSys(channel.Channel):
         Txtone = rec.Txtone
         Rxtone = rec.Rxtone
         Comment = rec.Comment
-        Skip = '' if rec.Skip else 'Scan'
+        Skip = '' if rec.Skip == 'N' else 'Scan'
 
         if recFilter.get('longName'): Name = rec.getLongName()
         derived = RtSys.Derived(rec, recFilter)
@@ -141,24 +141,24 @@ class RtSys(channel.Channel):
         CTCSS = derived.CTCSS
         DCS = derived.DCS
 
-        # <ch>                  1-1000                  column header is blank, column ignored
-        # Receive Frequency     146.96000
-        # Transmit Frequency    146.36000
-        # Offset Frequency      600 kHz | 5.00000 MHz | (blank)
-        # Offset Direction      Minus | Plus | Simplex
-        # Operating Mode        FM | AM; RtSystems also accepts "Auto".
-        # Name                  e.g. PSRG
-        # Show Name             Y
-        # Tone Mode             None, Tone, DCS (others ignored for now)
-        # CTCSS                 103.5
-        # DCS                   023
-        # Skip                  Scan
-        # Step                  e.g. "5 kHz"
-        # Clock Shift           N
-        # Tx Power              High | Low
-        # Tx Narrow             Y | N
-        # Pager Enable          N
-        # Comment               any string
+        #  0 <ch>                  1-1000                  column header is blank, column ignored
+        #  1 Receive Frequency     146.96000
+        #  2 Transmit Frequency    146.36000
+        #  3 Offset Frequency      600 kHz | 5.00000 MHz | (blank)
+        #  4 Offset Direction      Minus | Plus | Simplex
+        #  5 Operating Mode        FM | AM; RtSystems also accepts "Auto".
+        #  6 Name                  e.g. PSRG
+        #  7 Show Name             Y
+        #  8 Tone Mode             None, Tone, DCS (others ignored for now)
+        #  9 CTCSS                 103.5
+        # 10 DCS                   023
+        # 11 Skip                  Scan
+        # 12 Step                  e.g. "5 kHz"
+        # 13 Clock Shift           N
+        # 14 Tx Power              High | Low
+        # 15 Tx Narrow             Y | N
+        # 16 Pager Enable          N
+        # 17 Comment               any string
 
         Wide = 'Y' if Wide=="N" else 'N'
         csvout.writerow([count, Rxfreq, Txfreq, Offset_s, OpMode, 'Auto', Name, 'Y' if Name else 'N', ToneMode, CTCSS, DCS, Skip, 'Auto', 'N', 'High', Wide, 'N'] + banks + [Comment])

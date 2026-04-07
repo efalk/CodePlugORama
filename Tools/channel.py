@@ -4,13 +4,13 @@
 # This is the base class for holding radio programming
 # info.
 #
-# Channel class holds the following values:
+# Channel class holds the following 13 values:
 #
 #  Group
 #    Not commonly used. Some radios, e.g. TK-780, divide the
 #    channels into groups. Normally leave this unset.
 #
-#  Channel
+#  Chan
 #    The channel number. Caller is responsible for making sure
 #    this works for the radio in question. ACS 217 files have channel
 #    numbers like "V01" or "U22" so obviously the software is going to
@@ -52,7 +52,11 @@
 #    responsible for converting if necessary.
 #
 #  Skip:
-#    This channel should not be included in scans
+#    'Y', 'N' or '' for don't care.
+#
+# Many fields may be None. It is the responsibility of the output writers
+# to convert that to the appropriate (typically empty) string.
+# TODO: change this?
 
 import csv
 import decimal
@@ -92,7 +96,7 @@ class Channel(object):
 
     @classmethod
     def probe(cls, line: list):
-        """Examine line to see if the input is in Chirp format.
+        """Examine line to see if the input is in generic format.
         If so, return a class that can read it. Usually this
         class."""
         match = len(line) >= 12 and \
@@ -118,7 +122,8 @@ class Channel(object):
         if len(args) == 1:
             args = args[0]
         group, channel, txfreq, rxfreq, offset, \
-            name, comment, txtone, rxtone, mode, wide, power = args
+            name, comment, txtone, rxtone, mode, wide, power = args[:12]
+        skip = args[12] if len(args) >= 13 else ''
         if not txfreq:
             if offset:
                 try:
@@ -159,7 +164,7 @@ class Channel(object):
         self.Mode = mode
         self.Wide = wide
         self.Power = power
-        self.Skip = 'skip' in recFilter
+        self.Skip = skip or recFilter.get('skip','')
 
     def __repr__(self):
         return f'''Channel({repr(self.Group)}, {repr(self.Chan)}, {repr(self.Txfreq)}, {repr(self.Rxfreq)}, {repr(self.Offset)}, {repr(self.Name)}, {repr(self.Comment)}, {repr(self.Txtone)}, {repr(self.Rxtone)}, {repr(self.Mode)}, {repr(self.Wide)}, {repr(self.Power)})'''

@@ -73,6 +73,8 @@ the author if you have another format you'd like to add; it's not
 hard.
 """
 
+verbose = 0
+
 def main():
     global verbose
     ifile = sys.stdin
@@ -97,7 +99,7 @@ def main():
             elif flag == '-B':
                 recFilter['banks'] = value
             elif flag == '--skip':
-                recFilter['skip'] = True
+                recFilter['skip'] = 'Y'
             elif flag == '-s':
                 start = getInt(value)
                 if start is None:

@@ -385,6 +385,7 @@ also accepted. All RF frequencies in MHz.
 |mode|FM, AM, DV, LSB, USB, CW, RTTY, DIG, PKT, NCW,NCWR, CWR, P25, Auto, RTTYR, FSK, FSKR, DMR, DN, DIG, etc.|
 |wide|W \| N|
 |power|e.g. 5.0W. "high" and "low" also accepted.|
+|skip|Y \| N \| (blank)|
 
 The columns must be in this exact order and the header labels must match exactly:
 
