@@ -26,6 +26,7 @@ class Icom(object):
         Comment = rec.Comment
 
         # Derived values
+        if recFilter.get('longName'): Name = rec.getLongName()
         Offset = float(Txfreq) - float(Rxfreq)
         if Txfreq == Rxfreq: 
             Duplex = ''

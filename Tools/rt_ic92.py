@@ -40,6 +40,7 @@ class RtSysIc92(channel.Channel):
         Rxtone = rec.Rxtone
         Comment = rec.Comment
 
+        if recFilter.get('longName'): Name = rec.getLongName()
         derived = RtSys.Derived(rec, recFilter)
         Txtone = derived.Txtone
         Rxtone = derived.Rxtone

@@ -129,6 +129,7 @@ class RtSys(channel.Channel):
         Comment = rec.Comment
         Skip = '' if rec.Skip else 'Scan'
 
+        if recFilter.get('longName'): Name = rec.getLongName()
         derived = RtSys.Derived(rec, recFilter)
         Txtone = derived.Txtone
         Rxtone = derived.Rxtone
