@@ -271,6 +271,11 @@ class Channel(object):
     # OUTPUT SECTION
 
     @classmethod
+    def getOutputType(cls):
+        """Return the content type of the output and a reasonable file extension."""
+        return ("text/csv; charset=utf-8", "csv")
+
+    @classmethod
     def getWriter(cls, ofile):
         """Return an output file writer suitable for this format.
         In most cases, it's a csv writer."""
@@ -280,6 +285,11 @@ class Channel(object):
     def header(csvout, recFilter):
         """Write out the header"""
         csvout.writerow(["group","chan","txfreq","rxfreq","offset","name","comment","txtone","rxtone","mode","wide","power","skip"])
+
+    @staticmethod
+    def footer(csvout, recFilter):
+        """Write out the final piece of output"""
+        pass
 
     @staticmethod
     def write(rec, csvout, count: int, recFilter):
