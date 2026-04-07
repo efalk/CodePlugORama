@@ -16,6 +16,7 @@ from chirp import Chirp
 from rtsys import RtSys
 from icom import Icom
 from anytone import Anytone
+from plaintext import HtmlText
 
 # Explanation: running a test server on my system, the CWD as seen
 # by this script is "CodePlugORama". When run under production,
@@ -35,10 +36,12 @@ _modes = {'FM':'F', 'AM':'A', 'LSB':'L', 'USB':'U', 'CW':'C', 'DMR':'D', 'DSTAR'
     'PKT':'d', 'P25':'d', 'NXDN':'d', 'ATV':'d', 'DATV':'d', 'DIG':'d', }   # TODO: these modes
 
 # Classes to write various formats
-_writers = { "Chirp":Chirp, "RT Systems":RtSys, "Icom":Icom, "Anytone":Anytone}
+_writers = { "Chirp":Chirp, "RT Systems":RtSys, "Icom":Icom, "Anytone":Anytone,
+    'Plain text':HtmlText}
 
 # Name suffixes for output file
-_names = { "Chirp":'Chirp', "RT Systems":'RtSys', "Icom":'Icom', "Anytone":'Anytone'}
+_names = { "Chirp":'Chirp', "RT Systems":'RtSys', "Icom":'Icom', "Anytone":'Anytone',
+    'Plain text':'text'}
 
 def main():
     form = FieldStorage()
@@ -46,7 +49,6 @@ def main():
     # Debug only
     #print('Content-Type: text/plain; charset=utf-8')
     #print()
-    #print(os.getcwd())
 
     #print(f"cwd = {os.getcwd()}")
     #print(f"topdir = {_topdir}")
@@ -128,16 +130,18 @@ def main():
         print(_errorUnknownFormat % filename)
         return 0
 
-    csvout = csv.writer(sys.stdout)
+    csvout = writer.getWriter(sys.stdout)
 
     # OK, we've done all the sanity checks we can, time to spit out
     # the results.
 
     # TODO: incorporate some more metadata into the filename?
     # Source? Timestamp?
+    content_type, ext = writer.getOutputType()
+    print(f'Content-Type: {content_type}')
     outputName = 'CodePlugORama_' + _names[form.getvalue('outputFormat')]
-    print('Content-Type: text/csv; charset=utf-8')
-    print(f'Content-Disposition: attachment; filename="{outputName}.csv"')
+    if ext:
+        print(f'Content-Disposition: attachment; filename="{outputName}.{ext}"')
     print()
     try:
         common.process(csvin, reader, csvout, writer, start, recFilter)

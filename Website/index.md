@@ -62,6 +62,7 @@ customize the output.
 <option>RT Systems</option>
 <option>Icom</option>
 <option>Anytone</option>
+<option>Plain text</option>
 </select>
 </p>
 <p><label for="start">Start: </label><input type=text value="1" size=5 id="start" name="start"></p>
