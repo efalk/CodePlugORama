@@ -55,6 +55,7 @@ usage = f"""Convert CSV file from ACS 217 spreadsheet to formats radios use
         --Icom          Output for Icom
         --Anytone       Output for Icom (experimental)
         --IC-92         Output for Icom-92, RT Systems
+        --Plaintext     Output plain test, columns separated by tabs
         -l              Long names, for radios that can take them
         -s <n>          Start numbering at <n>; default is 1
         --sparse        Leave gaps in record numbers where
@@ -85,7 +86,8 @@ def main():
     recFilter = {}
     try:
         (optlist, args) = getopt.getopt(sys.argv[1:], 'hb:m:s:B:R:lv',
-            ['help', 'Chirp', 'RtSys', 'Icom', 'Anytone', 'IC-92', 'sparse', 'skip'])
+            ['help', 'Chirp', 'RtSys', 'Icom', 'Anytone', 'IC-92', 'sparse', 'skip',
+            'Plaintext'])
         for flag, value in optlist:
             if flag in ('-h', '--help'):
                 print(usage)
@@ -119,6 +121,9 @@ def main():
                 writer = Icom
             elif flag == '--Anytone':
                 writer = Anytone
+            elif flag == '--Plaintext':
+                from plaintext import Plaintext
+                writer = Plaintext
             elif flag == '--IC-92':
                 from rt_ic92 import RtSysIc92
                 writer = RtSysIc92
