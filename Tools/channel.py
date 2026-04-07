@@ -268,16 +268,31 @@ class Channel(object):
                 return True
         return False
 
-    # OUTPUT UTILITIES
+    # OUTPUT SECTION
 
     @classmethod
-    def getWriter(cls, ifile):
+    def getWriter(cls, ofile):
         """Return an output file writer suitable for this format.
         In most cases, it's a csv writer."""
-        return csv.writer(ifile)
+        return csv.writer(ofile)
+
+    @staticmethod
+    def header(csvout, recFilter):
+        """Write out the header"""
+        csvout.writerow(["group","chan","txfreq","rxfreq","offset","name","comment","txtone","rxtone","mode","wide","power","skip"])
+
+    @staticmethod
+    def write(rec, csvout, count: int, recFilter):
+        """Write out one record. This may throw an exception if any of
+        the fields are not valid."""
+        outrow = [rec.Group, count, rec.Txfreq, rec.Rxfreq, rec.Offset, rec.Name, rec.Comment, rec.Txtone, rec.Rxtone, rec.Mode, rec.Wide, rec.Power, rec.Skip]
+        csvout.writerow(outrow)
 
 # ---- program
 
+
+if __name__ == '__main__':
+    print('test')
 
 # chan = Channel(None, "3", "146.9", "146.3", "-0.6",
 #         "PSRG", "This is a comment", "103.5", None, 'W', '5W')
