@@ -16,12 +16,12 @@
 #    numbers like "V01" or "U22" so obviously the software is going to
 #    have to provide its own numbering when writing out the CSV files.
 #
-#  Txfreq
-#    Transmit frequency, Hz. Specify as a string; it will be
-#    converted if necessary
-#
 #  Rxfreq
 #    Receive frequency, Hz. Specify as a string; it will be
+#    converted if necessary
+#
+#  Txfreq
+#    Transmit frequency, Hz. Specify as a string; it will be
 #    converted if necessary
 #
 #  Offset
@@ -66,8 +66,8 @@ import sys
 # Schema:
 #   0 group, usually blank
 #   1 CH#
-#   2 txfreq
 #   3 rxfreq
+#   2 txfreq
 #   4 offset
 #   5 name
 #   6 comment
@@ -76,6 +76,7 @@ import sys
 #   9 mode
 #  10 wide
 #  11 power
+#  12 skip
 
 callsign_re = re.compile(r'''[A-Z]+\d[A-Z]+(-\d+)?''')  # callsign with optional -nn
 callsign_l_re = re.compile(r'''[A-Z]+\d[A-Z]+-\d+''')   # callsign with non-optional -nn
@@ -102,8 +103,8 @@ class Channel(object):
         match = len(line) >= 12 and \
             line[0] == "group" and \
             line[1] == "chan" and \
-            line[2] == "txfreq" and \
-            line[3] == "rxfreq" and \
+            line[2] == "rxfreq" and \
+            line[3] == "txfreq" and \
             line[4] == "offset" and \
             line[5] == "name" and \
             line[6] == "comment" and \
@@ -117,11 +118,11 @@ class Channel(object):
 
     def __init__(self, recFilter: dict, *args):
         """Create one channel object. Caller is responsible for ensuring that
-        txfreq and rxfreq are both valid. If offset is not provided, it will
+        rxfreq and txfreq are both valid. If offset is not provided, it will
         be computed from txfreq and rxfreq. All other fields must be provided."""
         if len(args) == 1:
             args = args[0]
-        group, channel, txfreq, rxfreq, offset, \
+        group, channel, rxfreq, txfreq, offset, \
             name, comment, txtone, rxtone, mode, wide, power = args[:12]
         skip = args[12] if len(args) >= 13 else ''
         if not txfreq:
@@ -154,8 +155,8 @@ class Channel(object):
 
         self.Group = group
         self.Chan = channel
-        self.Txfreq = txfreq
         self.Rxfreq = rxfreq
+        self.Txfreq = txfreq
         self.Offset = offset
         self.Name = name
         self.Comment = comment
@@ -167,7 +168,7 @@ class Channel(object):
         self.Skip = skip or recFilter.get('skip','')
 
     def __repr__(self):
-        return f'''Channel({repr(self.Group)}, {repr(self.Chan)}, {repr(self.Txfreq)}, {repr(self.Rxfreq)}, {repr(self.Offset)}, {repr(self.Name)}, {repr(self.Comment)}, {repr(self.Txtone)}, {repr(self.Rxtone)}, {repr(self.Mode)}, {repr(self.Wide)}, {repr(self.Power)})'''
+        return f'''Channel({repr(self.Group)}, {repr(self.Chan)}, {repr(self.Rxfreq)}, {repr(self.Txfreq)}, {repr(self.Offset)}, {repr(self.Name)}, {repr(self.Comment)}, {repr(self.Txtone)}, {repr(self.Rxtone)}, {repr(self.Mode)}, {repr(self.Wide)}, {repr(self.Power)}, {repr(self.Skip)})'''
 
     def getLongName(this):
         """Return a reasonable long-form name for this item; incorporate the
@@ -220,10 +221,10 @@ class Channel(object):
         if not line[2] and not line[3]:
             return None
         try:
-            txfreq = float(line[2])
+            rxfreq = float(line[2])
         except:
             try:
-                rxfreq = float(line[3])
+                txfreq = float(line[3])
             except:
                 return None
         try:
@@ -284,7 +285,7 @@ class Channel(object):
     @staticmethod
     def header(csvout, recFilter):
         """Write out the header"""
-        csvout.writerow(["group","chan","txfreq","rxfreq","offset","name","comment","txtone","rxtone","mode","wide","power","skip"])
+        csvout.writerow(["group","chan","rxfreq","txfreq","offset","name","comment","txtone","rxtone","mode","wide","power","skip"])
 
     @staticmethod
     def footer(csvout, recFilter):
@@ -295,7 +296,7 @@ class Channel(object):
     def write(rec, csvout, count: int, recFilter):
         """Write out one record. This may throw an exception if any of
         the fields are not valid."""
-        outrow = [rec.Group, count, rec.Txfreq, rec.Rxfreq, rec.Offset, rec.Name, rec.Comment, rec.Txtone, rec.Rxtone, rec.Mode, rec.Wide, rec.Power, rec.Skip]
+        outrow = [rec.Group, count, rec.Rxfreq, rec.Txfreq, rec.Offset, rec.Name, rec.Comment, rec.Txtone, rec.Rxtone, rec.Mode, rec.Wide, rec.Power, rec.Skip]
         csvout.writerow(outrow)
 
 # ---- program
