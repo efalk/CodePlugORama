@@ -107,7 +107,7 @@ class WWARA(channel.Channel):
             latitude, longitude, comment)
 
         super().__init__(recFilter, None, None, input_freq, output_freq, None,
-            call, comment, ctcss_in, ctcss_out, mode, wide, "High")
+            call, comment, ctcss_in, ctcss_out, mode, wide, "High", '')
 
     @staticmethod
     def getComment(fc_record_id, city, state, call, races, ares, url, latitude, longitude, comment):
@@ -136,13 +136,12 @@ class WWARA(channel.Channel):
             print(this, e, file=sys.stderr)
             return comment
 
-    @staticmethod
-    def parse(line, recFilter, cls=None):
+    @classmethod
+    def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         a list of WWARA objects or None if the record can't be parsed. Note
         that this function may return a list of results for multi-mode
         repeaters."""
-        if not cls: cls = WWARA
         if len(line) < 38: return None
         # line[3] is RX freq; if that's blank, then the entire record is invalid
         if not line[3]:

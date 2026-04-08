@@ -109,11 +109,10 @@ class Chirp(Channel):
             Name, Comment, txtone, rxtone, Mode, wide, Power, Skip)
 
 
-    @staticmethod
-    def parse(line, recFilter, cls=None):
+    @classmethod
+    def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an RtSys object or None if the list can't be parsed."""
-        if not cls: cls = Chirp
         if len(line) < 17: return None
         # line[2] is RX freq; if that's blank or not a number, then
         # the entire record is invalid

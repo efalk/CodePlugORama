@@ -65,9 +65,9 @@ import sys
 
 # Schema:
 #   0 group, usually blank
-#   1 CH#
-#   3 rxfreq
-#   2 txfreq
+#   1 chan
+#   2 rxfreq
+#   3 txfreq
 #   4 offset
 #   5 name
 #   6 comment
@@ -154,7 +154,7 @@ class Channel(object):
                 pass    # no helping it
 
         self.Group = group
-        self.Chan = channel
+        self.Chan = chan
         self.Rxfreq = rxfreq
         self.Txfreq = txfreq
         self.Offset = offset
@@ -208,11 +208,10 @@ class Channel(object):
                 return this.Name
 
 
-    @staticmethod
-    def parse(line, recFilter, cls=None):
+    @classmethod
+    def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an ics217 object or None if the list can't be parsed."""
-        if not cls: cls = Channel
         regex = recFilter.get('regex')
         if len(line) < 12: return None
         if regex and not regex.match(line[1]):

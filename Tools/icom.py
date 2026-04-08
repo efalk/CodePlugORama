@@ -5,7 +5,12 @@ import csv
 
 import channel
 
-class Icom(object):
+class Icom(channel.Channel):
+
+    # There is no input section at present
+
+    # OUTPUT SECTION
+
     @staticmethod
     def header(csvout: csv.writer, recFilter):
         """Write out the header line for the CSV file."""
@@ -57,7 +62,8 @@ class Icom(object):
         # Format frequency without rounding, just remove trailing zeros
         freq = f"{float(Rxfreq):g}"
 
-        # All ACS Frequencies are FM. Note that at least the IC-705 and CS-705 software don't support NFM.
+        # All ACS Frequencies are FM. Note that at least the
+        # IC-705 and CS-705 software don't support NFM.
         RadioMode = Mode
 
         # Create names matching Icom format - simplified

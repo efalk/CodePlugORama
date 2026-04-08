@@ -48,6 +48,7 @@ class RtSys(channel.Channel):
         toneMode = line[8]
         ctcss = line[9]
         dcs = line[10]
+        skip = line[11]
         power = line[14]
         narrow = line[15]
         if RtSys.hasBanks:
@@ -75,16 +76,17 @@ class RtSys(channel.Channel):
         elif toneMode == 'D Tone':
             txtone = 'D' + DCS; rxtone = ctcss
 
+        skip = 'N' if skip == 'Scan' else 'Y'
+
         super().__init__(recFilter, None, chan, txfreq, rxfreq, None, name, comment,
-            txtone, rxtone, mode, 'N' if narrow == 'Y' else 'W', power)
+            txtone, rxtone, mode, 'N' if narrow == 'Y' else 'W', power, skip)
 
         this.banks = banks
 
-    @staticmethod
-    def parse(line, recFilter, cls=None):
+    @classmethod
+    def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an RtSys object or None if the list can't be parsed."""
-        if not cls: cls = RtSys
         if len(line) < 18: return None
         # line[1] is RX freq; if that's blank or not a number, then
         # the entire record is invalid

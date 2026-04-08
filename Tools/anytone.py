@@ -151,14 +151,13 @@ class Anytone(Channel):
         wide = 'W' if Bandwidth == '25K' else 'N'
 
         super().__init__(recFilter, None, Chan, Txfreq, Rxfreq, None,
-            Name, ID, TxCode, RxCode, mode, wide, Power)
+            Name, ID, TxCode, RxCode, mode, wide, Power, '')
 
 
-    @staticmethod
-    def parse(line, recFilter, cls=None):
+    @classmethod
+    def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an RtSys object or None if the list can't be parsed."""
-        if not cls: cls = Anytone
         if len(line) < 17: return None
         # line[2] is RX freq; if that's blank or not a number, then
         # the entire record is invalid

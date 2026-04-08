@@ -125,7 +125,7 @@ class NERD(channel.Channel):
         comment = NERD.getComment(comment, city, st, status, mode)
 
         super().__init__(recFilter, None, None, txfreq, rxfreq, None,
-            call, comment, codeIn, codeOut, mode, wide, None)
+            call, comment, codeIn, codeOut, mode, wide, None, '')
 
     @staticmethod
     def getComment(comment, city, st, status, mode):
@@ -151,13 +151,12 @@ class NERD(channel.Channel):
             c.append(' (' + mode + ')')
         return ''.join(c)
 
-    @staticmethod
-    def parse(line, recFilter, cls=None):
+    @classmethod
+    def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         a list of NERD objects or None if the record can't be parsed. Note
         that this function may return a list of results for multi-mode
         repeaters."""
-        if not cls: cls = NERD
 
         rval = NERD.cache
         NERD.cache = []

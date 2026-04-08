@@ -62,7 +62,7 @@ class rr(channel.Channel):
             mode = mode[2:]
             wide = 'N'
         super().__init__(recFilter, None, line[0], None, line[2], line[3],
-            line[1], line[5], line[4], None, mode, wide, 'high')
+            line[1], line[5], line[4], None, mode, wide, 'High', '')
         this.Remarks = line[6]
         this.Group = line[8]
         this.Website = line[9]
@@ -90,11 +90,10 @@ class rr(channel.Channel):
             print(this, e, file=sys.stderr)
             raise
 
-    @staticmethod
-    def parse(line, recFilter, cls=None):
+    @classmethod
+    def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an rr object or None if the list can't be parsed."""
-        if not cls: cls = rr
         if len(line) < 13: return None
         # line[0] is channel number; if missing or not a number, reject
         if not line[0].isdigit(): return None

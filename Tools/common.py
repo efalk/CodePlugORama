@@ -18,6 +18,9 @@ from channel import Channel
 verbose = 0
 
 
+class CodePlugException(Exception):
+    pass
+
 def findReader(csvin) -> Channel:
     """Examine a CSV file to determine which of several known formats
     it is. Return Channel class or None"""
@@ -65,7 +68,7 @@ def process(csvin, reader, csvout, writer, start, recFilter):
         reader = findReader(csvin)
 
     if not reader:
-        raise Exception("Unable to determine input format")
+        raise CodePlugException("Unable to determine input format")
 
     writer.header(csvout, recFilter)
 

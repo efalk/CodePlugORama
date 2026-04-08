@@ -75,7 +75,7 @@ class ics217(channel.Channel):
         if rxtone.startswith('CSQ'): rxtone = None
         elif rxtone.startswith('TSQ'): rxtone = txtone
         super().__init__(recFilter, None, chan, txfreq, rxfreq, None,
-            name, comment, txtone, rxtone, mode, wide, "High")
+            name, comment, txtone, rxtone, mode, wide, "High", '')
         this.Config = config
         this.Txwid = txwid
         this.Remarks = remarks
@@ -134,11 +134,10 @@ class ics217(channel.Channel):
             name = this.Chan + ' ' + name
         return name
 
-    @staticmethod
-    def parse(line, recFilter, cls=None):
+    @classmethod
+    def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an ics217 object or None if the list can't be parsed."""
-        if not cls: cls = ics217
         prefixes = recFilter.get('bands')
         newEntries = recFilter.get('newEntries', False)
         regex = recFilter.get('regex')
