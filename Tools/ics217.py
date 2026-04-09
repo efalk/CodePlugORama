@@ -49,17 +49,12 @@ class ics217(channel.Channel):
 
     # INPUT SECTION
 
-    @classmethod
-    def probe(cls, line: list):
-        """Examine line to see if the input is in ACS format. Return
-        cls if so, else None."""
-        match = len(line) >= 11 and \
-            line[2] == "Display Name" and \
-            line[3] == "Channel/Repeater Name" and \
-            line[4] == "RX Freq" and \
-            line[5] == "N/W" and \
-            line[7] == "TX Freq"
-        return cls if match else None
+    # List of columns we're interested in, and reasonable defaults if not
+    # found. "None" indicates that the column is mandatory.
+    columns = {"Ch #":None, "Channel\nConfiguration":None, "Display Name":"",
+        "Channel/Repeater Name":"", "RX Freq":None, "N/W":"W",
+        "Rx Tone, CC/TS/TG":"CSQ", "TX Freq":"", "N/W":"W",
+        "Tx Tone, CC/TS/TG":"CSQ", "Mode":"A", "Remarks":""}
 
     def __init__(this, recFilter: dict, line):
         """Create an ics217 object from a list of csv values. Caller
@@ -138,17 +133,26 @@ class ics217(channel.Channel):
     def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an ics217 object or None if the list can't be parsed."""
+
+        chan = cls.fetchValue(line, "Ch #")
         prefixes = recFilter.get('bands')
-        newEntries = recFilter.get('newEntries', False)
+        if prefixes and (not chan or chan[0] not in prefixes):
+            return None
         regex = recFilter.get('regex')
-        if len(line) < 12: return None
-        # line[4] is RX freq; if that's blank, then the entire record is invalid
-        if not line[0] or (prefixes and line[0][0] not in prefixes) or not line[4]:
+        if regex and not regex.match(chan):
             return None
-        if not regex and line[0].endswith('N') ^ newEntries:
+        newEntries = recFilter.get('newEntries', False)
+        if chan.endswith('N') ^ newEntries:
             return None
-        if regex and not regex.match(line[0]):
+
+        rxfreq = cls.fetchValue(line, "RX Freq")
+        if not rxfreq:
             return None
+        try:
+            rxfreq = float(rxfreq)
+        except Exception as e:
+            return None
+
         try:
             rval = cls(recFilter, line)
             return rval if rval.testFilter(recFilter) else None

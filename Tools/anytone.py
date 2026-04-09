@@ -18,7 +18,8 @@ power_re = re.compile('[\d.]+')
 
 # Latest known schema:
 # Note: the software that uses this pops up a warning about how this format is
-# subject to change. This is likely not worth pursuing.
+# subject to change. This is the most recent version I could find. We ameliorate
+# the problem by only looking for key fields.
 #  0  No.                               1
 #  1  Channel Name                      V01PSR
 #  2  Receive Frequency                 146.96000
@@ -97,22 +98,12 @@ class Anytone(Channel):
 
     # INPUT SECTION
 
-    @classmethod
-    def probe(cls, line: list):
-        """Examine line to see if the input is in Anytone format. Return
-        this class if so, else None."""
-        match = len(line) >= 17 and \
-            line[0] == "No." and \
-            line[1] == "Channel Name" and \
-            line[2] == "Receive Frequency" and \
-            line[3] == "Transmit Frequency" and \
-            line[4] == "Channel Type" and \
-            line[5] == "Transmit Power" and \
-            line[6] == "Band Width" and \
-            line[7] == "CTCSS/DCS Decode" and \
-            line[8] == "CTCSS/DCS Encode" and \
-            line[12] == "Radio ID"
-        return cls if match else None
+    # List of columns we're interested in, and reasonable defaults if not
+    # found. "None" indicates that the column is mandatory.
+    columns = {"No.":"", "Channel Name":None, "Receive Frequency":None,
+        "Transmit Frequency":"", "Channel Type":None, "Transmit Power":"High",
+        "Band Width":"25K", "CTCSS/DCS Decode":"Off", "CTCSS/DCS Encode":"Off",
+        "Radio ID":"", "Squelch Mode":"Carrier", "Color Code":"", "DMR MODE":"0"}
 
 
     def __init__(this, recFilter: dict, line):
@@ -120,19 +111,12 @@ class Anytone(Channel):
         must have already vetted the input. The parse() function
         below can handle that."""
 
-        # These are the inputs
-        Chan = line[0]
-        Name = line[1]
-        Rxfreq = line[2]
-        Txfreq = line[3]
-        Type = line[4]      # "D-Digital" or "A-Analog"
-        Power = line[5]    # E.g. "High"
-        Bandwidth = line[6]    # e.g. 12.5K
-        RxCode = line[7]    # "Tone Squelch": squelch tone (RX)
-        TxCode = line[8]
-        Contact = line[9]
-        ID = line[12]
-        Squelch = line[14]  # "Carrier", "CTCSS/DCS"
+        Chan, Name, Rxfreq, Txfreq, Type, Power, Bandwidth, RxCode, TxCode, \
+            ID, Squelch, ColorCode, DMRMode = this.fetchValues(line,
+                "No.", "Channel Name", "Receive Frequency",
+                "Transmit Frequency", "Channel Type", "Transmit Power",
+                "Band Width", "CTCSS/DCS Decode", "CTCSS/DCS Encode",
+                "Radio ID", "Squelch Mode", "Color Code", "DMR MODE")
 
         # Map to values used in Channel object
         group = None
@@ -158,13 +142,13 @@ class Anytone(Channel):
     def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an RtSys object or None if the list can't be parsed."""
-        if len(line) < 17: return None
         # line[2] is RX freq; if that's blank or not a number, then
         # the entire record is invalid
-        if not line[2]:
+        Freq = cls.fetchValue(line, "Receive Frequency")
+        if not Freq:
             return None
         try:
-            rxfreq = float(line[2])
+            rxfreq = float(Freq)
         except Exception as e:
             return None
         try:

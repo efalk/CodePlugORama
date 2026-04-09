@@ -20,6 +20,8 @@ from rtsys import RtSys
 from icom import Icom
 from anytone import Anytone
 
+from common import verbose
+
 # TODO: add filtering for Yaesu Fusion, NXDN, etc.
 
 usage = f"""Convert CSV file from ACS 217 spreadsheet to formats radios use
@@ -46,7 +48,6 @@ usage = f"""Convert CSV file from ACS 217 spreadsheet to formats radios use
                                 S = DSTAR
                                 V = Digital Voice (DV)
                                 d = other digital
-        -N              Use the 'U..N' entries (default is don't use)
         -R <regex>      Use regex to select entries, e.g. 'V' or 'U..N'
 
     Output format:
@@ -74,10 +75,7 @@ the author if you have another format you'd like to add; it's not
 hard.
 """
 
-verbose = 0
-
 def main():
-    global verbose
     ifile = sys.stdin
 
     writer = Chirp
@@ -112,7 +110,7 @@ def main():
             elif flag == '--sparse':
                 recFilter['sparse'] = True
             elif flag == '-v':
-                verbose += 1
+                common.verbose += 1
             elif flag == '--Chirp':
                 writer = Chirp
             elif flag == '--RtSys':

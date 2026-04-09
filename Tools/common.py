@@ -38,6 +38,8 @@ def findReader(csvin) -> Channel:
         for r in readers:
             cls = r.probe(line)
             if cls:
+                if verbose:
+                    print("Chose reader", cls)
                 return cls
     return None
 
@@ -99,7 +101,7 @@ def process(csvin, reader, csvout, writer, start, recFilter):
         for rec in recs:
             try:
                 if verbose >= 2: print(rec, file=sys.stderr)
-                if sparse and rec.Chan != None:
+                if sparse and rec.Chan:
                     chan = rec.Chan
                     if not chan[0].isdigit():
                         if not leader: leader = chan[0]

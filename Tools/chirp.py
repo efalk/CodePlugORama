@@ -8,6 +8,29 @@ import sys
 
 from channel import Channel
 
+# Chirp schema
+#   0 Location      Memory location, starting at 1
+#   1 Name          e.g. "PSRG"
+#   2 Frequency     e.g. 146.960000
+#   3 Duplex        off, +, -, or <blank>
+#   4 Offset        e.g. 0.60000
+#   5 Txtone        <blank> Tone TSQL DTCS TSQL-R DTCS-R Cross
+#   6 rToneFreq
+#   7 cToneFreq
+#   8 DtcsCode      e.g. 023
+#   9 DtcsPolarity  e.g. NN
+#  10 RxDtcsCode    e.g. 023
+#  11 CrossMode     Tone->Tone Tone->DTCS DTCS->Tone DTCS-> ->DTCS ->Tone DTCS->DTCS
+#  12 Mode          WFM, FM, NFM
+#  13 TStep         e.g. 5.00
+#  14 Skip          <blank>, S
+#  15 Power         e.g. 5.0W
+#  16 Comment       any text
+#  17 URCALL        <blank>
+#  18 RPT1CALL      <blank>
+#  19 RPT2CALL      <blank>
+#  20 DVCODE        <blank>
+
 ValidModes = ["WFM", "FM", "NFM", "AM", "NAM", "DV", "USB", "LSB", "CW", "RTTY",
                 "DIG", "PKT", "NCW", "NCWR, CWR", "P25", "Auto", "RTTYR", "FSK",
                 "FSKR", "DMR", "DN"]
@@ -16,46 +39,25 @@ class Chirp(Channel):
 
     # INPUT SECTION
 
-    @classmethod
-    def probe(cls, line: list):
-        """Examine line to see if the input is in Chirp format. Return
-        this class if so, else None."""
-        match = len(line) >= 17 and \
-            line[1] == "Name" and \
-            line[2] == "Frequency" and \
-            line[3] == "Duplex" and \
-            line[4] == "Offset" and \
-            line[5] == "Tone" and \
-            line[6] == "rToneFreq" and \
-            line[7] == "cToneFreq" and \
-            line[8] == "DtcsCode" and \
-            line[9] == "DtcsPolarity"
-        return cls if match else None
+    # List of columns we're interested in, and reasonable defaults if not
+    # found. "None" indicates that the column is mandatory.
+    columns = {"Location":'', "Name":'', "Frequency":None, "Duplex":None,
+        "Offset":None, "Txtone":'', "rToneFreq":'88.5', "cToneFreq":'88.5',
+        "DtcsCode":'023', "RxDtcsCode":'023', "CrossMode":'Tone->Tone',
+        "Mode":'', "Skip":'', "Power":'5.0W', "Comment":''}
 
     def __init__(this, recFilter: dict, line):
         """Create a Chirp object from a list of csv values. Caller
         must have already vetted the input. The parse() function
         below can handle that."""
 
-        Chan = line[0]     # memory #, 0-based
-        Name = line[1]     # memory label
-        Freq = line[2]     # RX freq
-        Duplex = line[3]   # <blank> + - split off
-        Offset = line[4]   # offset, MHz *or* TX freq for "split"
-        Tone = line[5]     # "Tone Mode" column: <blank> Tone, TSQL, DTCS, DCCS-R, TSQL-R, Cross
-        Rtone = line[6]    # "Tone": repeater tone (TX)
-        Ctone = line[7]    # "Tone Squelch": squelch tone (RX)
-        DtcsCode = line[8]
-        DtcsPol = line[9]
-        RxDtcsCode = line[10]  # DTCS Polarity
-        CrossMode = line[11]   # Tone->Tone, DTCS->, ->DTCS, DTCS->Tone, ->Tone, DTCS->DTCS, Tone->
-        Mode = line[12]    # WFM, FM, NFM, AM, NAM, DV, USB, LSB, CW, RTTY,
-                           # DIG, PKT, NCW, NCWR, CWR, P25, Auto, RTTYR,
-                           # FSK, FSKR, DMR, DN
-        TStep = line[13]   # Tuning Step, e.g. 5.0
-        Skip = line[14]    # <blank> S
-        Power = line[15]   # E.g. "5.0W"
-        Comment = line[16]
+        Location, Name, Freq, Duplex, Offset, Tone, Rtone, \
+            Ctone, DtcsCode, RxDtcsCode, CrossMode, \
+            Mode, Skip, Power, Comment = this.fetchValues(line,
+                "Location", "Name", "Frequency", "Duplex", "Offset",
+                "Txtone", "rToneFreq", "cToneFreq", "DtcsCode",
+                "RxDtcsCode", "CrossMode", "Mode", "Skip", "Power",
+                "Comment")
 
         if Duplex == '+':
             pass
@@ -105,7 +107,7 @@ class Chirp(Channel):
 
         Skip = 'Y' if Skip else ''
 
-        super().__init__(recFilter, None, Chan, None, Freq, Offset,
+        super().__init__(recFilter, None, Location, None, Freq, Offset,
             Name, Comment, txtone, rxtone, Mode, wide, Power, Skip)
 
 
@@ -113,13 +115,15 @@ class Chirp(Channel):
     def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an RtSys object or None if the list can't be parsed."""
-        if len(line) < 17: return None
+
+        Freq = cls.fetchValue(line, "Frequency")
+
         # line[2] is RX freq; if that's blank or not a number, then
         # the entire record is invalid
-        if not line[2]:
+        if not Freq:
             return None
         try:
-            rxfreq = float(line[2])
+            rxfreq = float(Freq)
         except Exception as e:
             return None
         try:
@@ -148,19 +152,22 @@ class Chirp(Channel):
         Chan = rec.Chan       # memory #, 0-based
         Name = rec.Name       # memory label
         Rxfreq = rec.Rxfreq       # RX freq
+        Txfreq = rec.Txfreq       # TX freq
+        Offset = rec.Offset
         Mode = rec.Mode
         Wide = rec.Wide
-        Txfreq = rec.Txfreq       # RX freq
         Txtone = rec.Txtone
         Rxtone = rec.Rxtone
         Skip = 'S' if rec.Skip == 'Y' else ''
 
         # Derived values
         if recFilter.get('longName'): Name = rec.getLongName()
-        Offset = float(Txfreq) - float(Rxfreq)
+        #Offset = float(Txfreq) - float(Rxfreq)
         if Txfreq == Rxfreq: Duplex = ''
-        elif Offset > 0: Duplex = '+'
-        else: Duplex = '-'
+        elif Offset[0] == '-':
+            Offset = Offset[1:]
+            Duplex = '-'
+        else: Duplex = '+'
 
         rToneFreq = '88.5'
         cToneFreq = '88.5'  # Only used on cross mode
@@ -225,28 +232,5 @@ class Chirp(Channel):
             Wide = 'DIG'
         # TODO: other modes? e.g. "MF" appears in the ACS database
 
-        # Output (Chirp):
-        #  Location  Memory location, starting at 1
-        #  Name      e.g. "PSRG"
-        #  Frequency e.g. 146.960000
-        #  Duplex        off, +, -, or <blank>
-        #  Offset        e.g. 0.60000
-        #  Txtone    <blank> Tone TSQL DTCS TSQL-R DTCS-R Cross
-        #  rToneFreq
-        #  cToneFreq
-        #  DtcsCode  e.g. 023
-        #  DtcsPolarity  e.g. NN
-        #  RxDtcsCode    e.g. 023
-        #  CrossMode    Tone->Tone Tone->DTCS DTCS->Tone DTCS-> ->DTCS ->Tone DTCS->DTCS
-        #  Mode      WFM, FM, NFM
-        #  TStep     e.g. 5.00
-        #  Skip      <blank>, S
-        #  Power     e.g. 5.0W
-        #  Comment   any text
-        #  URCALL    <blank>
-        #  RPT1CALL  <blank>
-        #  RPT2CALL  <blank>
-        #  DVCODE    <blank>
-
-        csvout.writerow([count, Name, Rxfreq, Duplex, f"{abs(Offset):.6f}", ToneMode, rToneFreq, cToneFreq, RxDtcsCode, 'NN', RxDtcsCode, CrossMode, Wide, 5.00, Skip, '5.0W', Comment, '', '', '', DvMode])
+        csvout.writerow([count, Name, Rxfreq, Duplex, Offset, ToneMode, rToneFreq, cToneFreq, RxDtcsCode, 'NN', RxDtcsCode, CrossMode, Wide, 5.00, Skip, '5.0W', Comment, '', '', '', DvMode])
 

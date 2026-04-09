@@ -8,6 +8,26 @@ import sys
 
 import channel
 
+# RT Systems schema
+#  0 <ch>                  1-1000                  column header is blank, column ignored
+#  1 Receive Frequency     146.96000
+#  2 Transmit Frequency    146.36000
+#  3 Offset Frequency      600 kHz | 5.00000 MHz | (blank)
+#  4 Offset Direction      Minus | Plus | Simplex
+#  5 Operating Mode        FM | AM; RtSystems also accepts "Auto".
+#  6 Name                  e.g. PSRG
+#  7 Show Name             Y
+#  8 Tone Mode             None, Tone, DCS (others ignored for now)
+#  9 CTCSS                 103.5
+# 10 DCS                   023
+# 11 Skip                  Scan
+# 12 Step                  e.g. "5 kHz"
+# 13 Clock Shift           N
+# 14 Tx Power              High | Low
+# 15 Tx Narrow             Y | N
+# 16 Pager Enable          N
+# 17 Comment               any string
+
 class RtSys(channel.Channel):
     """This is the "generic" RT Systems code. It generates output that
     both Yaesu FT-60 and QRZ-1 are happy with. Other radios might
@@ -18,45 +38,43 @@ class RtSys(channel.Channel):
 
     # INPUT SECTION
 
+    # List of columns we're interested in, and reasonable defaults if not
+    # found. "None" indicates that the column is mandatory.
+    columns = {"":"", "n":"", "Receive Frequency":None, "Transmit Frequency":None,
+        "Operating Mode":"Auto", "Name":"", "Tone Mode":None,
+        "CTCSS":"", "DCS":"", "Skip":"Scan", "Tx Power":"High",
+        "Tx Narrow":"N", "Comment":"",
+        "Bank 1":"N", "Bank 2":"N", "Bank 3":"N", "Bank 4":"N", "Bank 5":"N",
+        "Bank 6":"N", "Bank 7":"N", "Bank 8":"N", "Bank 9":"N", "Bank 10":"N"}
+
     hasBanks = False
 
     @classmethod
     def probe(cls, line: list):
-        """Examine line to see if the input is in RT Systems format. Return
-        cls if so. Else None."""
-        isRt = len(line) >= 8 and \
-            line[1] == "Receive Frequency" and \
-            line[2] == "Transmit Frequency" and \
-            line[3] == "Offset Frequency" and \
-            line[4] == "Offset Direction" and \
-            line[5] == "Operating Mode" and \
-            line[6] == "Name" and \
-            line[7] == "Show Name"
-        if isRt and len(line) >= 18 and line[17] == "Bank 1":
-            RtSys.hasBanks = True
-        return cls if isRt else None
+        cls.hasBanks = "Bank 1" in line
+        return super().probe(line)
 
     def __init__(this, recFilter: dict, line):
         """Create an RtSys object from a list of csv values. Caller
         must have already vetted the input. The parse() function
         below can handle that."""
-        chan = line[0]
-        rxfreq = line[1]
-        txfreq = line[2]
-        mode = line[5]
-        name = line[6]
-        toneMode = line[8]
-        ctcss = line[9]
-        dcs = line[10]
-        skip = line[11]
-        power = line[14]
-        narrow = line[15]
+
+        chan, chann, rxfreq, txfreq, mode, name, toneMode, ctcss, dcs, \
+            skip, power, narrow, comment = this.fetchValues(line,
+            "", "n", "Receive Frequency", "Transmit Frequency",
+            "Operating Mode", "Name", "Tone Mode", "CTCSS",
+            "DCS", "Skip", "Tx Power", "Tx Narrow", "Comment")
+
+        # Some csv files have no label in the channel column, some have 'n'
+        # so we look for both.
+        chan = chan or chann
+
         if RtSys.hasBanks:
-            banks = line[17:27]
-            comment = line[27]
+            banks = this.fetchValues(line,
+                "Bank 1", "Bank 2", "Bank 3", "Bank 4", "Bank 5",
+                "Bank 6", "Bank 7", "Bank 8", "Bank 9", "Bank 10")
         else:
             banks = None
-            comment = line[17]
 
         txtone = rxtone = ''
         if toneMode == 'None':
@@ -87,20 +105,18 @@ class RtSys(channel.Channel):
     def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an RtSys object or None if the list can't be parsed."""
-        if len(line) < 18: return None
-        # line[1] is RX freq; if that's blank or not a number, then
-        # the entire record is invalid
-        if not line[1]:
+
+        rxfreq = cls.fetchValue(line, "Receive Frequency")
+        if not rxfreq:
             return None
         try:
-            rxfreq = float(line[1])
+            rxfreq = float(rxfreq)
             rval = cls(recFilter, line)
             return rval if rval.testFilter(recFilter) else None
         except Exception as e:
             print("Failed to parse: ", line, file=sys.stderr)
             print(e, file=sys.stderr)
             return None
-
 
 
 
@@ -114,7 +130,7 @@ class RtSys(channel.Channel):
             Banks = [f"Bank {i}," for i in range(1,11)]
         else:
             Banks = []
-        csvout.writerow(["n","Receive Frequency","Transmit Frequency","Offset Frequency","Offset Direction","Operating Mode","Name","Show Name","Tone Mode","CTCSS","DCS","Skip","Step","Clock Shift","Tx Power","Tx Narrow","Pager Enable"] + Banks + ["Comment"])
+        csvout.writerow(["","Receive Frequency","Transmit Frequency","Offset Frequency","Offset Direction","Operating Mode","Name","Show Name","Tone Mode","CTCSS","DCS","Skip","Step","Clock Shift","Tx Power","Tx Narrow","Pager Enable"] + Banks + ["Comment"])
 
     @staticmethod
     def write(rec: channel.Channel, csvout: csv.writer, count: int, recFilter):

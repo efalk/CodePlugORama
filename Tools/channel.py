@@ -117,8 +117,8 @@ class Channel(object):
         """Examine line to see if the input is in generic format.
         If so, return a class that can read it. Usually this
         class."""
-        columns = Channel.columns
-        colIdx = Channel.colIdx
+        columns = cls.columns
+        cls.colIdx = colIdx = {}
 
         # Step 1: see what we've got
         for idx,header in enumerate(line):
