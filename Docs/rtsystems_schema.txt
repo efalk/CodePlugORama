@@ -86,3 +86,17 @@ Tx Narrow		N
 Pager Enable		N
 Comment			PSRG; coordination; WW7PSR; Allstar 2462
 
+
+Output from RepeaterBook.
+
+Receive Frequency
+Transmit Frequency
+Offset Direction
+Name
+Tone Mode
+CTCSS
+Rx CTCSS
+DCS
+Rx DCS
+Comment
+

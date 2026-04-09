@@ -65,3 +65,62 @@ Tested on Anytone 878 software.
  50  Ana Aprs Mute                     0
  51  Send Talker Alias                 0
 
+
+Output from RepeaterBook
+
+  No.
+  Channel Name
+  Receive Frequency
+  Transmit Frequency
+  Channel Type
+  Transmit Power
+  Band Width
+  CTCSS/DCS Decode
+  CTCSS/DCS Encode
+  Contact
+  Contact Call Type
+  Contact TG/DMR ID
+  Radio ID
+  Busy Lock/TX Permit
+  Squelch Mode
+  Optional Signal
+  DTMF ID
+  2Tone ID
+  5Tone ID
+  PTT ID
+  Color Code
+  Slot
+  Scan List
+  Receive Group List
+  PTT Prohibit
+  Reverse
+  Simplex TDMA
+  Slot Suit
+  AES Digital Encryption
+  Digital Encryption
+  Call Confirmation
+  Talk Around(Simplex)
+  Work Alone
+  Custom CTCSS
+  2Tone Decode
+  Ranging
+  Through Mode
+  Digi APRS RX
+  Analog APRS PTT Mode
+  Digital APRS PTT Mode
+  APRS Report Type
+  Digital APRS Report Channel
+  Correct Frequency[Hz]
+  SMS Confirmation
+  Exclude channel from roaming
+  DMR MODE
+  DataAck Disable
+  R5ToneBot
+  R5ToneEot
+  R5ToneEot
+  Auto Scan
+  Ana Aprs Mute
+  Send Talker Alias
+  AnaAprsTxPath
+  ARC4
+  ex_emg_kind

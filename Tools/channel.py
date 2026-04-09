@@ -95,25 +95,46 @@ class Channel(object):
 
     # INPUT SECTION
 
+    # Subclasses can either override the probe() method, or override
+    # the `columns` dict below and let this class's probe() method
+    # figure it out. The latter method is more robust, but a little
+    # more work for the parser.
+
+    # Subclasses can override this dict. The value is the default
+    # if the column isn't found. None means it's mandatory. At least
+    # some of the columns must be mandatory to prevent the probe()
+    # function from just blindly accepting everything.
+    columns = {'group':'', 'chan':None, 'rxfreq':None, 'txfreq':'', 'offset':'',
+        'name':None, 'comment':'', 'txtone':'', 'rxtone':'', 'mode':'',
+        'wide':'W', 'power':'5.0W', 'skip':''}
+
+    # This dict is filled in by the probe function. Keys are the same as above.
+    # Values are either int indices into the input line, or string default values.
+    colIdx = {}
+
     @classmethod
     def probe(cls, line: list):
         """Examine line to see if the input is in generic format.
         If so, return a class that can read it. Usually this
         class."""
-        match = len(line) >= 12 and \
-            line[0] == "group" and \
-            line[1] == "chan" and \
-            line[2] == "rxfreq" and \
-            line[3] == "txfreq" and \
-            line[4] == "offset" and \
-            line[5] == "name" and \
-            line[6] == "comment" and \
-            line[7] == "txtone" and \
-            line[8] == "rxtone" and \
-            line[9] == "mode" and \
-            line[10] == "wide" and \
-            line[11] == "power"
-        return cls if match else None
+        columns = Channel.columns
+        colIdx = Channel.colIdx
+
+        # Step 1: see what we've got
+        for idx,header in enumerate(line):
+            if header in columns:
+                colIdx[header] = idx
+
+        # Step 2: see what we're missing
+        for key,value in columns.items():
+            if key not in colIdx:
+                dflt = columns[key]
+                if dflt is not None:
+                    colIdx[key] = dflt
+                else:
+                    return None
+
+        return cls
 
 
     def __init__(self, recFilter: dict, *args):
@@ -121,10 +142,15 @@ class Channel(object):
         rxfreq and txfreq are both valid. If offset is not provided, it will
         be computed from txfreq and rxfreq. All other fields must be provided."""
         if len(args) == 1:
-            args = args[0]
-        group, channel, rxfreq, txfreq, offset, \
-            name, comment, txtone, rxtone, mode, wide, power = args[:12]
-        skip = args[12] if len(args) >= 13 else ''
+            line = args[0]
+            group, chan, rxfreq, txfreq, offset, \
+                name, comment, txtone, rxtone, mode, wide, power, skip = \
+                    self.fetchValues(line, "group", "chan", "rxfreq", "txfreq", "offset",
+                        "name", "comment", "txtone", "rxtone", "mode", "wide", "power", "skip")
+        else:
+            group, chan, rxfreq, txfreq, offset, \
+                name, comment, txtone, rxtone, mode, wide, power, skip = args
+
         if not txfreq:
             if offset:
                 try:
@@ -152,6 +178,8 @@ class Channel(object):
                 offset = str(tf - rf)
             except:
                 pass    # no helping it
+
+        if not mode: mode = 'FM' if float(rxfreq) >= 100.0 else 'AM'
 
         self.Group = group
         self.Chan = chan
@@ -209,21 +237,40 @@ class Channel(object):
 
 
     @classmethod
+    def fetchValue(cls, line, key):
+        """Given an input line, a key, and the colummn index dict
+        previously computed in probe(), return the referenced value."""
+        idx = cls.colIdx[key]
+        return line[idx] if isinstance(idx, int) else idx
+
+    @classmethod
+    def fetchValues(cls, line: list, *keys) -> list:
+        """Given an input line, a list of keys, and the colummn index dict
+        previously computed in probe(), return the referenced values."""
+        rval = []
+        for key in keys:
+            idx = cls.colIdx[key]
+            rval.append(line[idx] if isinstance(idx, int) else idx)
+        return rval
+
+    @classmethod
     def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an ics217 object or None if the list can't be parsed."""
+
+        chan, rxfreq, txfreq = cls.fetchValues(line, 'chan', 'txfreq', 'rxfreq')
+
         regex = recFilter.get('regex')
-        if len(line) < 12: return None
-        if regex and not regex.match(line[1]):
+        if regex and not regex.match(chan):
             return None
         # At least one of rxfreq, txfreq must be provided
-        if not line[2] and not line[3]:
+        if not rxfreq and not txfreq:
             return None
         try:
-            rxfreq = float(line[2])
+            rxfreq = float(rxfreq)
         except:
             try:
-                txfreq = float(line[3])
+                txfreq = float(txfreq)
             except:
                 return None
         try:
@@ -297,6 +344,8 @@ class Channel(object):
         the fields are not valid."""
         outrow = [rec.Group, count, rec.Rxfreq, rec.Txfreq, rec.Offset, rec.Name, rec.Comment, rec.Txtone, rec.Rxtone, rec.Mode, rec.Wide, rec.Power, rec.Skip]
         csvout.writerow(outrow)
+
+
 
 # ---- program
 

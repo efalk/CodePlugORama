@@ -374,11 +374,11 @@ also accepted. All RF frequencies in MHz.
 
 |Field name|Explanation|
 |group|Radio group number if used;  usually blank|
-|chan|Channel (memory) number|
-|rxfreq|Receive frequency|
+|**chan**|Channel (memory) number|
+|**rxfreq**|Receive frequency|
 |txfreq|Transmit frequency or blank for simplex|
 |offset|Offset in MHz. E.g. -0.600|
-|name|Display name|
+|**name**|Display name|
 |comment|Any text|
 |txtone|CTCSS tone for transmit, "D<i>nnn</i>" for DCS, or blank|
 |rxtone|CTCSS tone for receive, "D<i>nnn</i>" for DCS, or blank|
@@ -387,9 +387,11 @@ also accepted. All RF frequencies in MHz.
 |power|e.g. 5.0W. "high" and "low" also accepted.|
 |skip|Y \| N \| (blank)|
 
-The columns must be in this exact order and the header labels must match exactly:
+The header labels must match exactly:
 
       group,chan,rxfreq,txfreq,offset,name,comment,txtone,rxtone,mode,wide,power
+
+Fields in bold are mandatory.
 
 For simplex, only the "rxfreq" column need be specified; "txfreq" and "offset"
 may be left blank. For a repeater, any two of "rxfreq", "txfreq", and "offset"
