@@ -30,6 +30,7 @@
 #  12 Longitude, e.g. -122.34575
 
 
+
 import sys
 
 import channel
@@ -63,8 +64,8 @@ class rr(channel.Channel):
             wide = 'N'
         super().__init__(recFilter, None, line[0], line[2], None, line[3],
             line[1], line[5], line[4], None, mode, wide, 'High', '')
-        this.Remarks = line[6]
-        this.Group = line[8]
+        this.Loc = line[6]
+        this.Grp = line[8]
         this.Website = line[9]
         this.State = line[10]
         this.Lat = line[11]
@@ -73,19 +74,21 @@ class rr(channel.Channel):
 
     def __repr__(this):
         mode = this.Mode if this.Wide == 'W' else 'NB'+this.Mode
-        return f'''rr({repr(this.Chan)}, {repr(this.Name)}, {repr(this.Txfreq)}, {repr(this.Offset)}, {repr(this.Txtone)}, {this.Comment}, {this.Remarks}, {mode}, {repr(this.Group)}, {repr(this.Website)}, {repr(this.State)}, {repr(this.Lat)}, {repr(this.Lon)})'''
+        return f"""rr(None, ({this.Chan!r}, {this.Rxfreq!r}, {this.Offset!r}, {this.Txtone!r},, {this.Loc!r}, {mode!r}, {this.Grp!r}, {this.Website!r}, {this.State!r}, {this.Lat!r}, {this.Lon!r}))"""
 
     def __str__(this):
         mode = this.Mode if this.Wide == 'W' else 'NB'+this.Mode
-        return f'''{csvget(this.Chan)}, {csvget(this.Name)}, {csvget(this.Txfreq)}, {csvget(this.Offset)}, {csvget(this.Txtone)}, {csvget(this.Comment)}, {csvget(this.Remarks)}, {mode}, {csvget(this.Group)}, {csvget(this.Website)}, {csvget(this.State)}, {csvget(this.Lat)}, {csvget(this.Lon)}'''
+        return f"""rr({this.Chan}, {this.Rxfreq}, {this.Offset}, {this.Txtone},, {this.Loc}, {mode}, {this.Grp}, {this.Website}, {this.State}, {this.Lat}, {this.Lon})"""
 
     def getComment(this):
         """Return a reasonable comment for this item"""
         try:
             c = []
-            if this.Comment: c.append(this.Comment)
-            if this.Remarks: c.append(this.Remarks)
-            return ';'.join(c)
+            if this.Grp: c.append(this.Grp)
+            if this.Loc: c.append(this.Loc)
+            if this.Website: c.append(this.Website)
+            if this.Lat: c.append(','.join((this.Lat,this.Lon)))
+            return '; '.join(c)
         except Exception as e:
             print(this, e, file=sys.stderr)
             raise

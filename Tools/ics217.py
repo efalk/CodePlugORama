@@ -49,24 +49,24 @@ class ics217(channel.Channel):
 
     # INPUT SECTION
 
-    # List of columns we're interested in, and reasonable defaults if not
-    # found. "None" indicates that the column is mandatory.
-    columns = {"Ch #":None, "Channel\nConfiguration":None, "Display Name":"",
-        "Channel/Repeater Name":"", "RX Freq":None, "N/W":"W",
-        "Rx Tone,\nCC/TS/TG":"CSQ", "TX Freq":"", "N/W":"W",
-        "Tx Tone,\nCC/TS/TG":"CSQ", "Mode":"A", "Remarks":""}
+    @classmethod
+    def probe(cls, line: list):
+        """Examine line to see if the input is in ACS format. Return
+        cls if so, else None."""
+        match = len(line) >= 11 and \
+            line[2] == "Display Name" and \
+            line[3] == "Channel/Repeater Name" and \
+            line[4] == "RX Freq" and \
+            line[5] == "N/W" and \
+            line[7] == "TX Freq"
+        return cls if match else None
 
     def __init__(this, recFilter: dict, line):
         """Create an ics217 object from a list of csv values. Caller
         must have already vetted the input. The parse() function
         below can handle that."""
         chan, config, name, comment, rxfreq, wide, rxtone, txfreq, \
-            txwid, txtone, mode, remarks = this.fetchValues(line,
-            "Ch #", "Channel\nConfiguration", "Display Name",
-            "Channel/Repeater Name", "RX Freq", "N/W",
-            "Rx Tone,\nCC/TS/TG", "TX Freq", "N/W",
-            "Tx Tone,\nCC/TS/TG", "Mode", "Remarks")
-
+            txwid, txtone, mode, remarks = line[:12]
         # Just a quick sanity check
         if config == 'Simplex' and txfreq != rxfreq:
             print(f'Warning: Channel {chan}, {name}, Simplex rxfreq {rxfreq} does not match txfreq {txfreq}', file=sys.stderr)
@@ -138,26 +138,17 @@ class ics217(channel.Channel):
     def parse(cls, line, recFilter):
         """Given a list, most likely provided by the csv module, return
         an ics217 object or None if the list can't be parsed."""
-
-        chan = cls.fetchValue(line, "Ch #")
         prefixes = recFilter.get('bands')
-        if prefixes and (not chan or chan[0] not in prefixes):
-            return None
-        regex = recFilter.get('regex')
-        if regex and not regex.match(chan):
-            return None
         newEntries = recFilter.get('newEntries', False)
-        if chan.endswith('N') ^ newEntries:
+        regex = recFilter.get('regex')
+        if len(line) < 12: return None
+        # line[4] is RX freq; if that's blank, then the entire record is invalid
+        if not line[0] or (prefixes and line[0][0] not in prefixes) or not line[4]:
             return None
-
-        rxfreq = cls.fetchValue(line, "RX Freq")
-        if not rxfreq:
+        if not regex and line[0].endswith('N') ^ newEntries:
             return None
-        try:
-            rxfreq = float(rxfreq)
-        except Exception as e:
+        if regex and not regex.match(line[0]):
             return None
-
         try:
             rval = cls(recFilter, line)
             return rval if rval.testFilter(recFilter) else None
