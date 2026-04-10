@@ -134,7 +134,7 @@ class Anytone(Channel):
 
         wide = 'W' if Bandwidth == '25K' else 'N'
 
-        super().__init__(recFilter, None, Chan, Txfreq, Rxfreq, None,
+        super().__init__(recFilter, None, Chan, Rxfreq, Txfreq, None,
             Name, ID, TxCode, RxCode, mode, wide, Power, '')
 
 

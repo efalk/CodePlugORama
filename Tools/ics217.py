@@ -53,15 +53,20 @@ class ics217(channel.Channel):
     # found. "None" indicates that the column is mandatory.
     columns = {"Ch #":None, "Channel\nConfiguration":None, "Display Name":"",
         "Channel/Repeater Name":"", "RX Freq":None, "N/W":"W",
-        "Rx Tone, CC/TS/TG":"CSQ", "TX Freq":"", "N/W":"W",
-        "Tx Tone, CC/TS/TG":"CSQ", "Mode":"A", "Remarks":""}
+        "Rx Tone,\nCC/TS/TG":"CSQ", "TX Freq":"", "N/W":"W",
+        "Tx Tone,\nCC/TS/TG":"CSQ", "Mode":"A", "Remarks":""}
 
     def __init__(this, recFilter: dict, line):
         """Create an ics217 object from a list of csv values. Caller
         must have already vetted the input. The parse() function
         below can handle that."""
         chan, config, name, comment, rxfreq, wide, rxtone, txfreq, \
-            txwid, txtone, mode, remarks = line[:12]
+            txwid, txtone, mode, remarks = this.fetchValues(line,
+            "Ch #", "Channel\nConfiguration", "Display Name",
+            "Channel/Repeater Name", "RX Freq", "N/W",
+            "Rx Tone,\nCC/TS/TG", "TX Freq", "N/W",
+            "Tx Tone,\nCC/TS/TG", "Mode", "Remarks")
+
         # Just a quick sanity check
         if config == 'Simplex' and txfreq != rxfreq:
             print(f'Warning: Channel {chan}, {name}, Simplex rxfreq {rxfreq} does not match txfreq {txfreq}', file=sys.stderr)
@@ -69,7 +74,7 @@ class ics217(channel.Channel):
         if txtone == 'CSQ': txtone = None
         if rxtone.startswith('CSQ'): rxtone = None
         elif rxtone.startswith('TSQ'): rxtone = txtone
-        super().__init__(recFilter, None, chan, txfreq, rxfreq, None,
+        super().__init__(recFilter, None, chan, rxfreq, txfreq, None,
             name, comment, txtone, rxtone, mode, wide, "High", '')
         this.Config = config
         this.Txwid = txwid

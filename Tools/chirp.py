@@ -107,7 +107,7 @@ class Chirp(Channel):
 
         Skip = 'Y' if Skip else ''
 
-        super().__init__(recFilter, None, Location, None, Freq, Offset,
+        super().__init__(recFilter, None, Location, Freq, None, Offset,
             Name, Comment, txtone, rxtone, Mode, wide, Power, Skip)
 
 

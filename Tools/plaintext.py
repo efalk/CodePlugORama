@@ -34,7 +34,7 @@ _head = """<!DOCTYPE HTML>
 </head>
 <body>
 <table>
-<tr><th>Group</th><th>Channel</th><th>Txfreq</th><th>Rxfreq</th>
+<tr><th>Group</th><th>Channel</th><th>Rxfreq</th><th>Txfreq</th>
 <th>Offset</th><th>Name</th><th>Comment</th><th>Txtone</th>
 <th>Rxtone</th><th>Mode</th><th>Wide</th><th>Power</th><th>Skip</th></tr>"""
 
@@ -82,4 +82,4 @@ class HtmlText(Channel):
         Power = rec.Power or ""
         Skip = rec.Skip or ""
         if recFilter.get('longName'): Name = rec.getLongName()
-        print(f"<tr><td>{Group}</td><td>{count}</td><td>{Txfreq}</td><td>{Rxfreq}</td><td>{Offset}</td><td>{Name}</td><td>{Comment}</td><td>{Txtone}</td><td>{Rxtone}</td><td>{Mode}</td><td>{Wide}</td><td>{Power}</td><td>{Skip}</td></td>", file=ofile)
+        print(f"<tr><td>{Group}</td><td>{count}</td><td>{Rxfreq}</td><td>{Txfreq}</td><td>{Offset}</td><td>{Name}</td><td>{Comment}</td><td>{Txtone}</td><td>{Rxtone}</td><td>{Mode}</td><td>{Wide}</td><td>{Power}</td><td>{Skip}</td></td>", file=ofile)

@@ -96,7 +96,7 @@ class RtSys(channel.Channel):
 
         skip = 'N' if skip == 'Scan' else 'Y'
 
-        super().__init__(recFilter, None, chan, txfreq, rxfreq, None, name, comment,
+        super().__init__(recFilter, None, chan, rxfreq, txfreq, None, name, comment,
             txtone, rxtone, mode, 'N' if narrow == 'Y' else 'W', power, skip)
 
         this.banks = banks

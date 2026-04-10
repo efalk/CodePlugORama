@@ -124,7 +124,7 @@ class NERD(channel.Channel):
 
         comment = NERD.getComment(comment, city, st, status, mode)
 
-        super().__init__(recFilter, None, None, txfreq, rxfreq, None,
+        super().__init__(recFilter, None, None, rxfreq, txfreq, None,
             call, comment, codeIn, codeOut, mode, wide, None, '')
 
     @staticmethod

@@ -61,7 +61,7 @@ class rr(channel.Channel):
         if mode.startswith('NB'):
             mode = mode[2:]
             wide = 'N'
-        super().__init__(recFilter, None, line[0], None, line[2], line[3],
+        super().__init__(recFilter, None, line[0], line[2], None, line[3],
             line[1], line[5], line[4], None, mode, wide, 'High', '')
         this.Remarks = line[6]
         this.Group = line[8]

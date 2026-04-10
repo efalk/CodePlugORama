@@ -106,7 +106,7 @@ class WWARA(channel.Channel):
         comment = WWARA.getComment(fc_record_id, city, state, call, races, ares, url,
             latitude, longitude, comment)
 
-        super().__init__(recFilter, None, None, input_freq, output_freq, None,
+        super().__init__(recFilter, None, None, output_freq, input_freq, None,
             call, comment, ctcss_in, ctcss_out, mode, wide, "High", '')
 
     @staticmethod
