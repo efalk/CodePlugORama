@@ -101,9 +101,16 @@ class Channel(object):
     # more work for the parser.
 
     # Subclasses can override this dict. The value is the default
-    # if the column isn't found. None means it's mandatory. At least
-    # some of the columns must be mandatory to prevent the probe()
-    # function from just blindly accepting everything.
+    # if the column isn't found. None means the column is
+    # mandatory. At least some of the columns must be mandatory to
+    # prevent the probe() function from just blindly accepting
+    # everything.
+    #
+    # Avoid the temptation to make this dict too accepting; the
+    # list of mandatory columns should never be a subset of any
+    # other class. Or at the very least, adjust the probe order
+    # to make sure the more restrictive class gets probed first.
+    # The check_subsets function will confirm this.
     columns = {'group':'', 'chan':None, 'rxfreq':None, 'txfreq':'', 'offset':'',
         'name':None, 'comment':'', 'txtone':'', 'rxtone':'', 'mode':'',
         'wide':'W', 'power':'5.0W', 'skip':''}

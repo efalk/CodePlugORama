@@ -21,9 +21,21 @@ verbose = 0
 class CodePlugException(Exception):
     pass
 
-def findReader(csvin) -> Channel:
-    """Examine a CSV file to determine which of several known formats
-    it is. Return Channel class or None"""
+def _readerList():
+    """Current list of all of the reader plugins we have."""
+
+    # Here's how it could be dynamically, but we'll hold off for now.
+    # TODO: get this list from a config file?
+    #import importlib
+    #import_list = (("chirp", "Chirp"), ("ics217", "ics217"), ("rr", "rr"),
+    #    ("wwara", "WWARA"), ("nerd", "NERD"), ("rtsys", "RtSys"),
+    #    ("anytone", "Anytone"))
+    #rval = []
+    #for module,cls in import_list:
+    #    module = importlib.import_module(module)
+    #    rval.append(getattr(module, cls))
+    #rval.append(Channel)
+
     from chirp import Chirp
     from ics217 import ics217
     from rr import rr
@@ -31,7 +43,12 @@ def findReader(csvin) -> Channel:
     from nerd import NERD
     from rtsys import RtSys
     from anytone import Anytone
-    readers = [Chirp, RtSys, ics217, rr, Channel, WWARA, NERD, Anytone]
+    return [Chirp, RtSys, ics217, rr, Channel, WWARA, NERD, Anytone]
+
+def findReader(csvin) -> Channel:
+    """Examine a CSV file to determine which of several known formats
+    it is. Return Channel class or None"""
+    readers = _readerList()
     for line in csvin:
         if verbose >= 2:
             print(line, file=sys.stderr)
