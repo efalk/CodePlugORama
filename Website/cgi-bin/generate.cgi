@@ -16,6 +16,7 @@ from chirp import Chirp
 from rtsys import RtSys
 from icom import Icom
 from anytone import Anytone
+from dm32 import DM32
 from plaintext import HtmlText
 
 # Explanation: running a test server on my system, the CWD as seen
@@ -37,11 +38,11 @@ _modes = {'FM':'F', 'AM':'A', 'LSB':'L', 'USB':'U', 'CW':'C', 'DMR':'D', 'DSTAR'
 
 # Classes to write various formats
 _writers = { "Chirp":Chirp, "RT Systems":RtSys, "Icom":Icom, "Anytone":Anytone,
-    'Plain text':HtmlText}
+    'Baofeng DM-32':DM32, 'Plain text':HtmlText}
 
 # Name suffixes for output file
 _names = { "Chirp":'Chirp', "RT Systems":'RtSys', "Icom":'Icom', "Anytone":'Anytone',
-    'Plain text':'text'}
+    'Baofeng DM-32':'DM32', 'Plain text':'text'}
 
 def main():
     form = FieldStorage()

@@ -43,7 +43,8 @@ def _readerList():
     from nerd import NERD
     from rtsys import RtSys
     from anytone import Anytone
-    return [Chirp, RtSys, ics217, rr, Channel, WWARA, NERD, Anytone]
+    from dm32 import DM32
+    return [Chirp, RtSys, ics217, rr, Channel, WWARA, NERD, Anytone, DM32]
 
 def findReader(csvin) -> Channel:
     """Examine a CSV file to determine which of several known formats

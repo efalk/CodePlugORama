@@ -18,7 +18,6 @@ import common
 from chirp import Chirp
 from rtsys import RtSys
 from icom import Icom
-from anytone import Anytone
 
 from common import verbose
 
@@ -56,6 +55,7 @@ usage = f"""Convert CSV file from ACS 217 spreadsheet to formats radios use
         --Icom          Output for Icom
         --Anytone       Output for Icom (experimental)
         --IC-92         Output for Icom-92, RT Systems
+        --DM32          Output for Baofeng DM-32/CPS
         --Plaintext     Output plain test, columns separated by tabs
         -l              Long names, for radios that can take them
         -s <n>          Start numbering at <n>; default is 1
@@ -85,7 +85,7 @@ def main():
     try:
         (optlist, args) = getopt.getopt(sys.argv[1:], 'hb:m:s:B:R:lv',
             ['help', 'Chirp', 'RtSys', 'Icom', 'Anytone', 'IC-92', 'sparse', 'skip',
-            'Plaintext'])
+            'DM32', 'Plaintext'])
         for flag, value in optlist:
             if flag in ('-h', '--help'):
                 print(usage)
@@ -118,7 +118,11 @@ def main():
             elif flag == '--Icom':
                 writer = Icom
             elif flag == '--Anytone':
+                from anytone import Anytone
                 writer = Anytone
+            elif flag == '--DM32':
+                from dm32 import DM32
+                writer = DM32
             elif flag == '--Plaintext':
                 from plaintext import Plaintext
                 writer = Plaintext
@@ -131,7 +135,10 @@ def main():
         return 2
 
     if args:
-        ifile = open(args[0],'r')
+        ifile = open(args[0],'r',errors='ignore')
+    else:
+        ifile.reconfigure(errors='ignore')
+
     csvin = csv.reader(ifile)
 
     csvout = writer.getWriter(sys.stdout)

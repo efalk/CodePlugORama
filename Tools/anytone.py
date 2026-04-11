@@ -10,10 +10,6 @@ import sys
 from channel import Channel
 import common
 
-ValidModes = ["WFM", "FM", "NFM", "AM", "NAM", "DV", "USB", "LSB", "CW", "RTTY",
-                "DIG", "PKT", "NCW", "NCWR, CWR", "P25", "Auto", "RTTYR", "FSK",
-                "FSKR", "DMR", "DN"]
-
 power_re = re.compile('[\d.]+')
 
 # Latest known schema:

@@ -62,6 +62,7 @@ customize the output.
 <option>RT Systems</option>
 <option>Icom</option>
 <option>Anytone</option>
+<option>Baofeng DM-32</option>
 <option>Plain text</option>
 </select>
 </p>
