@@ -77,12 +77,8 @@ customize the output.</p>
 
 <h2>Output options:</h2>
 <p><label for="outputFormat">Format: </label><select id="outputFormat" name="outputFormat">
-<option>Chirp</option>
-<option>RT Systems</option>
-<option>Icom</option>
-<option>Anytone</option>
-<option>Baofeng DM-32</option>
-<option>Plain text</option>
+[for outputs]<option>[outputs]</option>
+[end]
 </select>
 </p>
 <p><label for="start">Start: </label><input type=text value="1" size=5 id="start" name="start"></p>

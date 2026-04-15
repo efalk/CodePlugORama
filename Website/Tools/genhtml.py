@@ -18,12 +18,16 @@ def main():
     configreader = csv.reader(open(configfilename, "r"), dialect=csv.excel_tab)
 
     sources = []
+    outputs = []
     for line in configreader:
+        if not line: continue
         if line[0].startswith('#'): continue
         if line[0] == 'source':
             sources.append(line[1])
+        elif line[0] == 'output':
+            outputs.append(line[1])
 
-    ezt_data = {'sources': sources}
+    ezt_data = {'sources': sources, 'outputs':outputs}
 
     template = Template(inputfilename)
     template.generate(sys.stdout, ezt_data)

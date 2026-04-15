@@ -7,3 +7,11 @@ source	New england Repeaters	NERepeaters_3-26.csv
 source	Repeater Roundabout	RepeaterRoundabout.csv
 source	GMRS	gmrs.csv
 source	MURS	murs.csv
+
+# Label in the form, module, class
+output	Chirp	chirp	Chirp
+output	RT Systems	rtsys	RtSys
+output	Icom	icom	Icom
+output	Anytone	anytone	Anytone
+output	Baofeng DM-32	dm32	DM32
+output	Plain text	plaintext	HtmlText

@@ -2,6 +2,12 @@
 This is a tool that converts from one of several CSV database formats
 to a format that can be read by Chirp, RT Systems, or Icom.
 
+The `Website` and `Sources` directories are used to implement the
+"CodePlugORama" online tool. They're intended to be customized and
+uploaded to your own server. Edit Website/Makefile to set your
+own server destination. Add your own source databases to Sources,
+and edit config.txt accordingly.
+
 As of this writing, there are parsers for Chirp, RT Systems,
 ARRL, New England Repeater Database, and a "generic" format.
 See the [Accepted Formats](https://github.com/efalk/CodePlugORama/blob/main/Website/help.md#accepted-formats)

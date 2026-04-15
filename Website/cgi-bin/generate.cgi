@@ -12,12 +12,7 @@ sys.path.append('../Tools')
 
 import common
 from fieldstorage import FieldStorage
-from chirp import Chirp
-from rtsys import RtSys
-from icom import Icom
-from anytone import Anytone
-from dm32 import DM32
-from plaintext import HtmlText
+from channel import Channel
 
 # Explanation: running a test server on my system, the CWD as seen
 # by this script is "CodePlugORama". When run under production,
@@ -36,13 +31,8 @@ _bands = {'hf':'L', 'vhf':'V', 'vhf2':'T', 'uhf':'U', 'gmrs':'G', 'digital':'D'}
 _modes = {'FM':'F', 'AM':'A', 'LSB':'L', 'USB':'U', 'CW':'C', 'DMR':'D', 'DSTAR':'S',
     'PKT':'d', 'P25':'d', 'NXDN':'d', 'ATV':'d', 'DATV':'d', 'DIG':'d', }   # TODO: these modes
 
-# Classes to write various formats
-_writers = { "Chirp":Chirp, "RT Systems":RtSys, "Icom":Icom, "Anytone":Anytone,
-    'Baofeng DM-32':DM32, 'Plain text':HtmlText}
-
-# Name suffixes for output file
-_names = { "Chirp":'Chirp', "RT Systems":'RtSys', "Icom":'Icom', "Anytone":'Anytone',
-    'Baofeng DM-32':'DM32', 'Plain text':'text'}
+sources = []
+outputs = {}
 
 def main():
     form = FieldStorage()
@@ -58,10 +48,11 @@ def main():
     #print(form)
     #print()
 
+    readConfig()
+
     # Select the source
     try:
         source = form.getvalue('source')
-        #print(source)
         if not source: die("Invalid form submission")
         ifile = getInputFile(source, form)
     except NameError as e:
@@ -90,9 +81,10 @@ def main():
         #print(f"modes: {modes}")
         if modes: recFilter['modes'] = modes
 
-    writer = Chirp
     outputFormat = form.getvalue('outputFormat')
-    writer = _writers[outputFormat]
+    writer = getWriter(outputFormat)
+    if not writer:
+        die(f"Unrecognized output format '{outputFormat}'; internal error")
     #print(f"format: {outputFormat}")
     #print(f"writer: {writer}")
 
@@ -140,7 +132,7 @@ def main():
     # Source? Timestamp?
     content_type, ext = writer.getOutputType()
     print(f'Content-Type: {content_type}')
-    outputName = 'CodePlugORama_' + _names[form.getvalue('outputFormat')]
+    outputName = 'CodePlugORama_' + outputs[outputFormat][2]
     if ext:
         print(f'Content-Disposition: attachment; filename="{outputName}.{ext}"')
     print()
@@ -151,12 +143,9 @@ def main():
         return 3
     return 0
 
-def getInputFile(source: str, form: FieldStorage):
-    if source.startswith('Upload'):
-        fileInput = form['fileInput']
-        return io.TextIOWrapper(fileInput.file, encoding='utf-8', errors='ignore')
+def readConfig():
+    global sources, outputs
 
-    # Grab a built-in database
     def tryOpen(*names):
         for name in names:
             try:
@@ -167,21 +156,41 @@ def getInputFile(source: str, form: FieldStorage):
 
     with tryOpen("../config.txt", "config.txt") as ifile:
         for line in csv.reader(ifile, dialect=csv.excel_tab):
+            if not line: continue
             if line[0] == 'source':
-                if line[1] == source:
-                    ifilename = _sourcedir + line[2]
-                    if '*' in ifilename:
-                        l = glob.glob(ifilename)
-                        if not l:
-                            die("Internal error: source db not found")
-                        ifilename = l[0]
-                    try:
-                        return open(ifilename, "r")
-                    except Exception as e:
-                        die(f"Internal error: {e}")
+                if len(line) >= 3:
+                    sources.append(line[1:])
+            elif line[0] == 'output':
+                    outputs[line[1]] = line[1:]
+
+
+def getInputFile(source: str, form: FieldStorage):
+    if source.startswith('Upload'):
+        fileInput = form['fileInput']
+        return io.TextIOWrapper(fileInput.file, encoding='utf-8', errors='ignore')
+
+    for line in sources:
+        if line[0] == source:
+            ifilename = _sourcedir + line[1]
+            if '*' in ifilename:
+                l = glob.glob(ifilename)
+                if not l:
+                    die("Internal error: source db not found")
+                ifilename = l[0]
+            try:
+                return open(ifilename, "r")
+            except Exception as e:
+                die(f"Internal error: {e}")
 
     die("Internal error: source db not found")
 
+def getWriter(outputFormat: str) -> Channel:
+    import importlib
+    output = outputs.get(outputFormat)
+    if not output:
+        return None
+    module = importlib.import_module(output[1])
+    return getattr(module, output[2])
 
 def die(message):
     print('Content-Type: text/plain; charset=utf-8')
