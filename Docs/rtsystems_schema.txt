@@ -4,7 +4,7 @@ and columns can be omitted if not needed.
 
 The two schemas shown here were exported from different devices.
 
-<ch>			0-999			column header is blank, column ignored
+Channel Number		0-999			column header is blank, column ignored
 Receive Frequency	146.96000
 Transmit Frequency	146.36000		always present even for simplex
 Offset Frequency	600 kHz | 5.0000 MHz
@@ -27,7 +27,7 @@ Comment			may be blank
 
 From FT-60:
 
-<ch>			1-1000			column header is blank, column ignored
+Channel Number		1-1000			column header is blank, column ignored
 Receive Frequency	146.96000
 Transmit Frequency	146.36000
 Offset Frequency	600 kHz | 5.00000 MHz | (blank)
@@ -67,7 +67,7 @@ Comment			any string
 
 Another variant:
 
-<ch>									1
+Channel Number		1
 Receive Frequency	146.9600
 Transmit Frequency	146.3600
 Offset Frequency	600 kHz

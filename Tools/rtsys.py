@@ -127,10 +127,10 @@ class RtSys(channel.Channel):
         """Write out the header line for the CSV file."""
         banks = recFilter.get('banks')
         if banks:
-            Banks = [f"Bank {i}," for i in range(1,11)]
+            Banks = [f"Bank {i}" for i in range(1,11)]
         else:
             Banks = []
-        csvout.writerow(["","Receive Frequency","Transmit Frequency","Offset Frequency","Offset Direction","Operating Mode","Name","Show Name","Tone Mode","CTCSS","DCS","Skip","Step","Clock Shift","Tx Power","Tx Narrow","Pager Enable"] + Banks + ["Comment"])
+        csvout.writerow(["Channel Number","Receive Frequency","Transmit Frequency","Offset Frequency","Offset Direction","Operating Mode","Name","Show Name","Tone Mode","CTCSS","DCS","Skip","Step","Clock Shift","Tx Power","Tx Narrow","Pager Enable"] + Banks + ["Comment"])
 
     @staticmethod
     def write(rec: channel.Channel, csvout: csv.writer, count: int, recFilter):

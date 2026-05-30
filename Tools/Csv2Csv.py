@@ -19,7 +19,7 @@ from chirp import Chirp
 from rtsys import RtSys
 from icom import Icom
 
-from common import verbose
+from common import verbose, getInt
 
 # TODO: add filtering for Yaesu Fusion, NXDN, etc.
 
