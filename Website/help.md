@@ -12,6 +12,11 @@ RT Systems, Icom, or Anytone can understand.
 There are several built-in databases you can use, or you can upload
 your own in one of several [accepted formats](#accepted-formats).
 
+This utility was written with the members of the
+[Seattle Auxiliary Communications Service](https://www.seattleacs.org/) in
+mind. If you're not a member of the ACS, most of the stuff here won't be of
+any interest to you, except when uploading your own source.
+
 That said, let's get started.
 
 ## Using this tool
@@ -34,8 +39,15 @@ uncle.
 The drop-down list allows you to select one of the following
 databases.
 
+* ACS ICS 217 — The ICS 217 form used by ACS. This is a large
+database with hundreds of entries in different bands and different
+operating modes. If you're not in the ACS, you probably don't want
+this one.
+* ACS Winlink list — That subset of the ICS 217 specific to Winlink nodes.
 * Repeater Roundabout — List of repeaters for the Repeater Roundabout event.
 Updated every year.
+* Seattle emergency hubs — Channel list used to program the GMRS radios
+used by the Seattle Emergency Hub system.
 * WWARA — Repeater list issued by the Western Washington Amateur Radio Association. Updated frequently.
 * GMRS — List of GMRS frequencies.
 * MURS — List of MURS (Multi-Use Radio Service) frequencies.
@@ -45,7 +57,7 @@ translated to a form appropriate to your radio. See
 
 ### Filter by band
 
-For a large database, the WWARA database in particular, there are channels
+For a large database, the ACS 217 in particular, there are channels
 in several bands. Chances are, you're not interested in them all, so
 this option allows you to limit the inputs.
 
@@ -54,10 +66,11 @@ this option allows you to limit the inputs.
 * 1.25m — VHF 1.25 meter band
 * 70cm — UHF
 * GMRS — GMRS frequencies
+* Digital — Channels marked as digital (ACS 217 only)
 
 ### Filter by mode
 
-For a large database, the WWARA database in particular, there are channels
+For a large database, the ACS 217 in particular, there are channels
 using several different operating modes.
 Chances are, you're not interested in them all, so
 this option allows you to limit the inputs.
@@ -156,6 +169,8 @@ With **Sparse** set, the output would be
 This tool recognizes several input formats, as identified by the CSV
 header line. These are as follows:
 
+<div id="toc-A"></div>
+
 Note that since this tool accepts and writes out Chirp and Rt Systems
 formats, it can be used to translate back and forth.
 
@@ -163,13 +178,12 @@ If your input file is not one of the formats listed there, and it's a
 reasonably commonly-used format, contact me at KK7NNS at gmail; new
 formats are very easy to add.
 
-*General notes:* These source files are mostly written for radios and not repeaters.
+*General notes:* These source files are intended for radios and not repeaters.
 This means that **rxfreq** and **txfreq** refer to the frequencies from the
 radio's point of view. They would be swapped when programming a repeater. It's
 often better to think of them as "downlink" and "uplink" respectively.
-The **offset** value is added to (or subtracted from) the rxfreq to get the txfreq.
-
-<div id="toc-A"></div>
+The **offset** value is added to (or subtracted from) the **rxfreq**
+to get the **txfreq**.
 
 ## Chirp
 
@@ -179,7 +193,7 @@ CSV files exported from Chirp contain the following fields:
 |Location|Memory location, starting at 1|
 |Name|	e.g. "PSRG"|
 |Frequency|e.g. 146.960000|
-|Duplex|	off, +, -, or <blank>|
+|Duplex|	**off, +, -**, or blank|
 |Offset|	e.g. 0.60000|
 |Tone|	one of:|
 ||<blank>	no tone|
@@ -188,7 +202,7 @@ CSV files exported from Chirp contain the following fields:
 ||**DTCS** — DTCS on TX & RX using DtcsCode|
 ||**TSQL-R** — Tone on RX using rToneFreq|
 ||**DTCS-R** — DTCS on RX using DtcsCode|
-||**Cross** — see CrossMode|
+||**Cross** — see **CrossMode**, below|
 ||note: see https://chirp.danplanet.com/projects/chirp/wiki/DevelopersToneModes for cases where cToneFreq is used instead.|
 |rToneFreq|e.g. 103.5, required, even if not used|
 |cToneFreq|required, even if not used|
@@ -205,7 +219,7 @@ CSV files exported from Chirp contain the following fields:
 ||**DTCS->DTCS**|
 |Mode|WFM, FM, NFM, AM, NAM, DV, LSB, USB, CW, RTTY, DIG, PKT, NCW,NCWR, CWR, P25, Auto, RTTYR, FSK, FSKR, DMR, DN|
 |TStep|	e.g. 5.00|
-|Skip|	<blank>, S|
+|Skip|	**S** or blank|
 |Power|	e.g. 5.0W|
 |Comment|	any text|
 |URCALL|	?|
@@ -391,7 +405,7 @@ The header labels must match exactly:
 
       group,chan,rxfreq,txfreq,offset,name,comment,txtone,rxtone,mode,wide,power
 
-Fields in bold are mandatory.
+Fields in **bold** are mandatory.
 
 For simplex, only the "rxfreq" column need be specified; "txfreq" and "offset"
 may be left blank. For a repeater, any two of "rxfreq", "txfreq", and "offset"
