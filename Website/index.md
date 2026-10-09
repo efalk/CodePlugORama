@@ -11,7 +11,7 @@ customize the output.
 <html><p>Click <a href="help.html" target="CodePlugHelp">here for detailed instructions</a></p></html>
 
 <html>
-<form action="./cgi-bin/generate.cgi" method=POST enctype="multipart/form-data" name="mainForm">
+<form action="./cgi-bin/generate.cgi" method=GET enctype="multipart/form-data" name="mainForm">
 <h2>Select source:</h2>
 <p><label for="source">Source:</label> <select id="source" name="source" onchange="inputSelection()">
 <!-- NOTE: edit the javascript if you change this list -->
@@ -109,15 +109,24 @@ and if there are gaps in the input, there will be gaps in the output.</p>
 <p>For more details, see
 <a href="help.html#sparse" target="CodePlugHelp">help file</a></p>
 </div>
-
 </p>
+
 <p><label for="skip">Skip: </label><input type=checkbox id="skip" name="skip">
 <button id="skipQ" popovertarget="skipHelp" type="button" class="circleBtn">?</button></p>
 <div id="skipHelp" popover class="popupBox">
 <p>Sets the "skip this channel while scanning" flag for all channels. If the
 input CSV file had a "skip" column, it is overridden.</p></div>
+</p>
 
-<p><input type=submit name="submit"></p>
+<p><label for="banks">Banks: </label><input type=text value="" size=20 id="banks" name="banks">
+<button id="banksQ" popovertarget="banksHelp" type="button" class="circleBtn">?</button></p>
+<div id="banksHelp" popover class="popupBox">
+<p>Some radios define multiple banks, e.g. Yaesu FT-60 has ten banks and any memory
+may be assigned to any combination of banks. This field allows you to specify the
+banks for output files that support it.</p></div>
+</p>
+
+<p><input type=submit></p>
 </form>
 <div id="debug"></div>
 </html>
@@ -129,5 +138,6 @@ setupDnD();
 setupPopover("nameQ","nameHelp");
 setupPopover("sparseQ","sparseHelp");
 setupPopover("skipQ","skipHelp");
+setupPopover("banksQ","banksHelp");
 -->
 </script>

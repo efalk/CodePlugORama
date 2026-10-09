@@ -1,3 +1,4 @@
+# Note: builds go foo.md => foo.ezt => foo.html
 
 # Customize these for your server
 DESTHOST=yourname@example.com
@@ -19,7 +20,7 @@ index.html: index.ezt
 # The markdown processor is non-standard, so markdown.ezt is checked into git
 # so you don't have to regenerate it.
 
-index.html: index.ezt
+index.html: index.ezt config.txt
 	Tools/genhtml.py config.txt $< > $@
 
 %.html:	%.md Makefile header.html trailer.html

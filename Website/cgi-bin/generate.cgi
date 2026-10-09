@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
 
+"""Accept a submission from the form in index.html and generate the
+desired output. This may be a CSV file or human-readable html."""
+
 import cgi
 import csv
 import glob
@@ -105,6 +108,10 @@ def main():
     if form.getvalue('skip'):
         recFilter['skip'] = 'Y'
         #print("sparse")
+
+    banks = form.getvalue('banks')
+    if banks:
+        recFilter['banks'] = banks
 
     #print()
     #print('----')
