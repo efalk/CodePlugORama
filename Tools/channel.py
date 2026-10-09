@@ -158,6 +158,9 @@ class Channel(object):
             group, chan, rxfreq, txfreq, offset, \
                 name, comment, txtone, rxtone, mode, wide, power, skip = args
 
+        if not group and 'group' in recFilter:
+            group = recFilter['group']
+
         if not txfreq:
             if offset:
                 try:

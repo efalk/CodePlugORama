@@ -91,6 +91,10 @@ def main():
     #print(f"format: {outputFormat}")
     #print(f"writer: {writer}")
 
+    group = form.getvalue('group')
+    if group:
+        recFilter['group'] = group
+
     start = form.getvalue('start')
     try:
         start = int(start)

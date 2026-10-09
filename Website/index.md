@@ -62,6 +62,15 @@ customize the output.
 [end]
 </select>
 </p>
+
+<p><label for="group">Group: </label><input type=text value="" size=5 id="group" name="group">
+<button id="groupQ" popovertarget="groupHelp" type="button" class="circleBtn">?</button></p>
+<div id="groupHelp" popover class="popupBox">
+<p>Some radios divide memories into groups. This field allows you to specify the
+default group for output files that support it. For the vast majority of radios, just
+leave this blank.</p></div>
+</p>
+
 <p><label for="start">Start: </label><input type=text value="1" size=5 id="start" name="start"></p>
 
 <p><label for="longNames">Long names: </label>
@@ -135,6 +144,7 @@ banks for output files that support it.</p></div>
 <script language="JavaScript">
 <!--
 setupDnD();
+setupPopover("groupQ","groupHelp");
 setupPopover("nameQ","nameHelp");
 setupPopover("sparseQ","sparseHelp");
 setupPopover("skipQ","skipHelp");

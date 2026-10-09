@@ -56,7 +56,7 @@ class HtmlText(Channel):
     @classmethod
     def getWriter(cls, ofile):
         """Return an output file writer suitable for this format.
-        In most cases, it's a csv writer."""
+        In this case, just the output file."""
         return ofile
 
     @staticmethod
